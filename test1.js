@@ -1,6 +1,7 @@
 var raml = require("raml-1-parser");
 var fs = require("fs");
 var path = require("path");
+var nunjucks = require("nunjucks");
 
 var fName = path.resolve(__dirname, "spec/c2s-api.raml");
 var api = raml.loadApiSync(fName);

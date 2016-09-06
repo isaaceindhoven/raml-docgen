@@ -1,0 +1,11 @@
+= {{title}}
+:toc:
+:doctype: book
+{{author}}  {% if author_email_present %} <{{author_email}}>
+{{version}}
+
+{{description}}
+
+{% for e in endpoints %}
+== {{e.method}} {{ e.uri }}
+{% endfor %}
