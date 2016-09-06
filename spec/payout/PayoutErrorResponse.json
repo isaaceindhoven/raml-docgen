@@ -1,0 +1,22 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class PayoutErrorResponse",
+  "type" : "object",
+  "properties" : {
+    "errorId" : {
+      "type" : "string"
+    },
+    "errors" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "../errors/definitions.json#/definitions/APIError"
+      },
+      "minItems" : 1,
+      "uniqueItems" : false
+    },
+    "payoutResult" : {
+      "$ref" : "definitions.json#/definitions/PayoutResult"
+    }
+  },
+  "required" : [ "errorId", "errors" ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class ErrorResponse",
+  "type" : "object",
+  "properties" : {
+    "errorId" : {
+      "type" : "string"
+    },
+    "errors" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "definitions.json#/definitions/APIError"
+      },
+      "minItems" : 1,
+      "uniqueItems" : false
+    }
+  },
+  "required" : [ "errorId", "errors" ]
+}

@@ -1,0 +1,14 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class GetIINDetailsRequest",
+  "type" : "object",
+  "properties" : {
+    "bin" : {
+      "type" : "string"
+    },
+    "paymentContext" : {
+      "$ref" : "definitions.json#/definitions/PaymentContext"
+    }
+  },
+  "required" : [ "bin" ]
+}

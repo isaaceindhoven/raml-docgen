@@ -1,0 +1,378 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions",
+  "definitions" : {
+    "AccountOnFile" : {
+      "type" : "object",
+      "properties" : {
+        "attributes" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AccountOnFileAttribute"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "displayHints" : {
+          "$ref" : "#/definitions/AccountOnFileDisplayHints"
+        },
+        "id" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "paymentProductId" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    },
+    "AccountOnFileAttribute" : {
+      "allOf" : [ {
+        "$ref" : "../definitions.json#/definitions/KeyValuePair"
+      }, {
+        "properties" : {
+          "mustWriteReason" : {
+            "$ref" : "#/definitions/AccountOnFileAttributeMustWriteReason"
+          },
+          "status" : {
+            "$ref" : "#/definitions/AccountOnFileAttributeStatus"
+          }
+        }
+      } ]
+    },
+    "AccountOnFileAttributeMustWriteReason" : {
+      "type" : "string",
+      "enum" : [ "IN_THE_PAST" ]
+    },
+    "AccountOnFileAttributeStatus" : {
+      "type" : "string",
+      "enum" : [ "READ_ONLY", "CAN_WRITE", "MUST_WRITE" ]
+    },
+    "AccountOnFileDisplayHints" : {
+      "type" : "object",
+      "properties" : {
+        "labelTemplate" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/LabelTemplateElement"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "logo" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DirectoryEntry" : {
+      "type" : "object",
+      "properties" : {
+        "countryNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "issuerId" : {
+          "type" : "string"
+        },
+        "issuerList" : {
+          "type" : "string"
+        },
+        "issuerName" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "issuerId", "issuerList", "issuerName" ]
+    },
+    "EmptyValidator" : {
+      "type" : "object"
+    },
+    "FixedListValidator" : {
+      "type" : "object",
+      "properties" : {
+        "allowedValues" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        }
+      }
+    },
+    "LabelTemplateElement" : {
+      "type" : "object",
+      "properties" : {
+        "attributeKey" : {
+          "type" : "string"
+        },
+        "mask" : {
+          "type" : "string"
+        }
+      }
+    },
+    "LengthValidator" : {
+      "type" : "object",
+      "properties" : {
+        "maxLength" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "minLength" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    },
+    "PaymentProduct" : {
+      "type" : "object",
+      "properties" : {
+        "accountsOnFile" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AccountOnFile"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "allowsRecurring" : {
+          "type" : "boolean"
+        },
+        "allowsTokenization" : {
+          "type" : "boolean"
+        },
+        "autoTokenized" : {
+          "type" : "boolean"
+        },
+        "displayHints" : {
+          "$ref" : "#/definitions/PaymentProductDisplayHints"
+        },
+        "fields" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PaymentProductField"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "id" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "maxAmount" : {
+          "type" : "integer",
+          "maximum" : 9223372036854775807
+        },
+        "minAmount" : {
+          "type" : "integer",
+          "maximum" : 9223372036854775807
+        },
+        "mobileIntegrationLevel" : {
+          "type" : "string"
+        },
+        "paymentMethod" : {
+          "type" : "string"
+        },
+        "paymentProductGroup" : {
+          "type" : "string"
+        },
+        "usesRedirectionTo3rdParty" : {
+          "type" : "boolean"
+        }
+      },
+      "required" : [ "id" ]
+    },
+    "PaymentProductDisplayHints" : {
+      "type" : "object",
+      "properties" : {
+        "displayOrder" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "logo" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PaymentProductField" : {
+      "type" : "object",
+      "properties" : {
+        "dataRestrictions" : {
+          "$ref" : "#/definitions/PaymentProductFieldDataRestrictions"
+        },
+        "displayHints" : {
+          "$ref" : "#/definitions/PaymentProductFieldDisplayHints"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PaymentProductFieldDataRestrictions" : {
+      "type" : "object",
+      "properties" : {
+        "isRequired" : {
+          "type" : "boolean"
+        },
+        "validators" : {
+          "$ref" : "#/definitions/PaymentProductFieldValidators"
+        }
+      }
+    },
+    "PaymentProductFieldDisplayHints" : {
+      "type" : "object",
+      "properties" : {
+        "alwaysShow" : {
+          "type" : "boolean"
+        },
+        "displayOrder" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "formElement" : {
+          "$ref" : "#/definitions/PaymentProductFieldFormElement"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "mask" : {
+          "type" : "string"
+        },
+        "obfuscate" : {
+          "type" : "boolean"
+        },
+        "placeholderLabel" : {
+          "type" : "string"
+        },
+        "preferredInputType" : {
+          "type" : "string"
+        },
+        "tooltip" : {
+          "$ref" : "#/definitions/PaymentProductFieldTooltip"
+        }
+      }
+    },
+    "PaymentProductFieldFormElement" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "valueMapping" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ValueMappingElement"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        }
+      }
+    },
+    "PaymentProductFieldTooltip" : {
+      "type" : "object",
+      "properties" : {
+        "image" : {
+          "type" : "string"
+        },
+        "label" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PaymentProductFieldValidators" : {
+      "type" : "object",
+      "properties" : {
+        "emailAddress" : {
+          "$ref" : "#/definitions/EmptyValidator"
+        },
+        "expirationDate" : {
+          "$ref" : "#/definitions/EmptyValidator"
+        },
+        "fixedList" : {
+          "$ref" : "#/definitions/FixedListValidator"
+        },
+        "length" : {
+          "$ref" : "#/definitions/LengthValidator"
+        },
+        "luhn" : {
+          "$ref" : "#/definitions/EmptyValidator"
+        },
+        "range" : {
+          "$ref" : "#/definitions/RangeValidator"
+        },
+        "regularExpression" : {
+          "$ref" : "#/definitions/RegularExpressionValidator"
+        }
+      }
+    },
+    "PaymentProductGroup" : {
+      "type" : "object",
+      "properties" : {
+        "accountsOnFile" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AccountOnFile"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "displayHints" : {
+          "$ref" : "#/definitions/PaymentProductDisplayHints"
+        },
+        "fields" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PaymentProductField"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "id" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "id" ]
+    },
+    "RangeValidator" : {
+      "type" : "object",
+      "properties" : {
+        "maxValue" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "minValue" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    },
+    "RegularExpressionValidator" : {
+      "type" : "object",
+      "properties" : {
+        "regularExpression" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ValueMappingElement" : {
+      "type" : "object",
+      "properties" : {
+        "displayName" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

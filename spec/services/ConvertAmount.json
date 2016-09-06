@@ -1,0 +1,11 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class ConvertAmount",
+  "type" : "object",
+  "properties" : {
+    "convertedAmount" : {
+      "type" : "integer",
+      "maximum" : 9223372036854775807
+    }
+  }
+}

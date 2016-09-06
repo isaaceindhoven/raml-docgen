@@ -1,0 +1,545 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions",
+  "definitions" : {
+    "AbstractOrderStatus" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AbstractPaymentMethodSpecificInput" : {
+      "type" : "object",
+      "properties" : {
+        "paymentProductId" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    },
+    "AdditionalOrderInputAirlineData" : {
+      "type" : "object",
+      "properties" : {
+        "airlineData" : {
+          "$ref" : "#/definitions/AirlineData"
+        }
+      }
+    },
+    "Address" : {
+      "type" : "object",
+      "properties" : {
+        "additionalInfo" : {
+          "type" : "string"
+        },
+        "city" : {
+          "type" : "string"
+        },
+        "countryCode" : {
+          "type" : "string"
+        },
+        "houseNumber" : {
+          "type" : "string"
+        },
+        "state" : {
+          "type" : "string"
+        },
+        "stateCode" : {
+          "type" : "string"
+        },
+        "street" : {
+          "type" : "string"
+        },
+        "zip" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AirlineData" : {
+      "type" : "object",
+      "properties" : {
+        "agentNumericCode" : {
+          "type" : "string"
+        },
+        "code" : {
+          "type" : "string"
+        },
+        "flightDate" : {
+          "type" : "string"
+        },
+        "flightLegs" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AirlineFlightLeg"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "invoiceNumber" : {
+          "type" : "string"
+        },
+        "isETicket" : {
+          "type" : "boolean"
+        },
+        "isRegisteredCustomer" : {
+          "type" : "boolean"
+        },
+        "isRestrictedTicket" : {
+          "type" : "boolean"
+        },
+        "isThirdParty" : {
+          "type" : "boolean"
+        },
+        "issueDate" : {
+          "type" : "string"
+        },
+        "merchantCustomerId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "passengerName" : {
+          "type" : "string"
+        },
+        "placeOfIssue" : {
+          "type" : "string"
+        },
+        "pnr" : {
+          "type" : "string"
+        },
+        "pointOfSale" : {
+          "type" : "string"
+        },
+        "posCityCode" : {
+          "type" : "string"
+        },
+        "ticketDeliveryMethod" : {
+          "type" : "string"
+        },
+        "ticketNumber" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "code", "name" ]
+    },
+    "AirlineFlightLeg" : {
+      "type" : "object",
+      "properties" : {
+        "airlineClass" : {
+          "type" : "string"
+        },
+        "arrivalAirport" : {
+          "type" : "string"
+        },
+        "carrierCode" : {
+          "type" : "string"
+        },
+        "date" : {
+          "type" : "string"
+        },
+        "departureTime" : {
+          "type" : "string"
+        },
+        "fare" : {
+          "type" : "string"
+        },
+        "fareBasis" : {
+          "type" : "string"
+        },
+        "flightNumber" : {
+          "type" : "string"
+        },
+        "number" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "originAirport" : {
+          "type" : "string"
+        },
+        "stopoverCode" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "airlineClass", "arrivalAirport", "carrierCode", "date", "number", "originAirport" ]
+    },
+    "AmountOfMoney" : {
+      "type" : "object",
+      "properties" : {
+        "amount" : {
+          "type" : "integer",
+          "maximum" : 9223372036854775807
+        },
+        "currencyCode" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "amount", "currencyCode" ]
+    },
+    "BankAccount" : {
+      "type" : "object",
+      "properties" : {
+        "accountHolderName" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BankAccountBban" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/BankAccount"
+      }, {
+        "properties" : {
+          "accountNumber" : {
+            "type" : "string"
+          },
+          "bankCode" : {
+            "type" : "string"
+          },
+          "bankName" : {
+            "type" : "string"
+          },
+          "branchCode" : {
+            "type" : "string"
+          },
+          "checkDigit" : {
+            "type" : "string"
+          },
+          "countryCode" : {
+            "type" : "string"
+          }
+        }
+      } ]
+    },
+    "BankAccountIban" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/BankAccount"
+      }, {
+        "properties" : {
+          "iban" : {
+            "type" : "string"
+          }
+        }
+      } ]
+    },
+    "Card" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CardWithoutCvv"
+      }, {
+        "properties" : {
+          "cvv" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "cvv" ]
+      } ]
+    },
+    "CardEssentials" : {
+      "type" : "object",
+      "properties" : {
+        "cardNumber" : {
+          "type" : "string"
+        },
+        "expiryDate" : {
+          "type" : "string"
+        }
+      }
+    },
+    "CardFraudResults" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/FraudResults"
+      }, {
+        "properties" : {
+          "avsResult" : {
+            "type" : "string"
+          },
+          "cvvResult" : {
+            "type" : "string"
+          },
+          "retailDecisions" : {
+            "$ref" : "#/definitions/FraudResultsRetailDecisions"
+          }
+        }
+      } ]
+    },
+    "CardWithoutCvv" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CardEssentials"
+      }, {
+        "properties" : {
+          "cardholderName" : {
+            "type" : "string"
+          },
+          "issueNumber" : {
+            "type" : "string"
+          }
+        }
+      } ]
+    },
+    "CompanyInformation" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ContactDetailsBase" : {
+      "type" : "object",
+      "properties" : {
+        "emailAddress" : {
+          "type" : "string"
+        },
+        "emailMessageType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "CustomerBase" : {
+      "type" : "object",
+      "properties" : {
+        "companyInformation" : {
+          "$ref" : "#/definitions/CompanyInformation"
+        },
+        "merchantCustomerId" : {
+          "type" : "string"
+        },
+        "vatNumber" : {
+          "type" : "string"
+        }
+      }
+    },
+    "FraudFields" : {
+      "type" : "object",
+      "properties" : {
+        "customerIpAddress" : {
+          "type" : "string"
+        },
+        "defaultFormFill" : {
+          "type" : "string"
+        },
+        "giftCardType" : {
+          "type" : "string"
+        },
+        "giftMessage" : {
+          "type" : "string"
+        },
+        "hasForgottenPwd" : {
+          "type" : "boolean"
+        },
+        "hasPassword" : {
+          "type" : "boolean"
+        },
+        "isPreviousCustomer" : {
+          "type" : "boolean"
+        },
+        "orderTimezone" : {
+          "type" : "string"
+        },
+        "shipComments" : {
+          "type" : "string"
+        },
+        "shipmentTrackingNumber" : {
+          "type" : "string"
+        },
+        "userData" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "website" : {
+          "type" : "string"
+        }
+      }
+    },
+    "FraudResults" : {
+      "type" : "object",
+      "properties" : {
+        "fraudServiceResult" : {
+          "type" : "string"
+        }
+      }
+    },
+    "FraudResultsRetailDecisions" : {
+      "type" : "object",
+      "properties" : {
+        "fraudCode" : {
+          "type" : "string"
+        },
+        "fraudNeural" : {
+          "type" : "string"
+        },
+        "fraudRCF" : {
+          "type" : "string"
+        }
+      }
+    },
+    "KeyValuePair" : {
+      "type" : "object",
+      "properties" : {
+        "key" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OrderStatusCategory" : {
+      "type" : "string",
+      "enum" : [ "CREATED", "PENDING_PAYMENT", "ACCOUNT_VERIFIED", "PENDING_MERCHANT", "PENDING_CONNECT_OR_3RD_PARTY", "COMPLETED", "REVERSED", "REFUNDED", "UNSUCCESSFUL" ]
+    },
+    "OrderStatusOutput" : {
+      "type" : "object",
+      "properties" : {
+        "errors" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "errors/definitions.json#/definitions/APIError"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "isCancellable" : {
+          "type" : "boolean"
+        },
+        "statusCategory" : {
+          "$ref" : "#/definitions/OrderStatusCategory"
+        },
+        "statusCode" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        },
+        "statusCodeChangeDateTime" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PaymentProductFilter" : {
+      "type" : "object",
+      "properties" : {
+        "groups" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "minItems" : 0,
+          "uniqueItems" : true
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer",
+            "maximum" : 2147483647
+          },
+          "minItems" : 0,
+          "uniqueItems" : true
+        }
+      }
+    },
+    "PersonalNameBase" : {
+      "type" : "object",
+      "properties" : {
+        "firstName" : {
+          "type" : "string"
+        },
+        "surname" : {
+          "type" : "string"
+        },
+        "surnamePrefix" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Region" : {
+      "type" : "string",
+      "enum" : [ "EU", "US" ]
+    },
+    "ResultDoRiskAssessment" : {
+      "allOf" : [ {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string"
+          },
+          "result" : {
+            "type" : "string"
+          }
+        }
+      }, {
+        "oneOf" : [ {
+          "properties" : {
+            "retaildecisionsCCFraudCheckOutput" : {
+              "$ref" : "#/definitions/RetailDecisionsCCFraudCheckOutput"
+            }
+          },
+          "required" : [ "retaildecisionsCCFraudCheckOutput" ]
+        }, {
+          "properties" : {
+            "validationBankAccountOutput" : {
+              "$ref" : "#/definitions/ValidationBankAccountOutput"
+            }
+          },
+          "required" : [ "validationBankAccountOutput" ]
+        }, {
+        } ]
+      } ]
+    },
+    "RetailDecisionsCCFraudCheckOutput" : {
+      "type" : "object",
+      "properties" : {
+        "fraudCode" : {
+          "type" : "string"
+        },
+        "fraudNeural" : {
+          "type" : "string"
+        },
+        "fraudRCF" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ValidationBankAccountCheck" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "result" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ValidationBankAccountOutput" : {
+      "type" : "object",
+      "properties" : {
+        "checks" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ValidationBankAccountCheck"
+          },
+          "minItems" : 0,
+          "uniqueItems" : false
+        },
+        "newBankName" : {
+          "type" : "string"
+        },
+        "reformattedAccountNumber" : {
+          "type" : "string"
+        },
+        "reformattedBankCode" : {
+          "type" : "string"
+        },
+        "reformattedBranchCode" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

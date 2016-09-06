@@ -1,0 +1,48 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class TokenResponse",
+  "allOf" : [ {
+    "type" : "object",
+    "properties" : {
+      "id" : {
+        "type" : "string"
+      },
+      "paymentProductId" : {
+        "type" : "integer",
+        "maximum" : 2147483647
+      }
+    },
+    "required" : [ "id", "paymentProductId" ]
+  }, {
+    "oneOf" : [ {
+      "properties" : {
+        "sepaDirectDebit" : {
+          "$ref" : "definitions.json#/definitions/TokenSepaDirectDebit"
+        }
+      },
+      "required" : [ "sepaDirectDebit" ]
+    }, {
+      "properties" : {
+        "nonSepaDirectDebit" : {
+          "$ref" : "definitions.json#/definitions/TokenNonSepaDirectDebit"
+        }
+      },
+      "required" : [ "nonSepaDirectDebit" ]
+    }, {
+      "properties" : {
+        "card" : {
+          "$ref" : "definitions.json#/definitions/TokenCard"
+        }
+      },
+      "required" : [ "card" ]
+    }, {
+      "properties" : {
+        "eWallet" : {
+          "$ref" : "definitions.json#/definitions/TokenEWallet"
+        }
+      },
+      "required" : [ "eWallet" ]
+    }, {
+    } ]
+  } ]
+}

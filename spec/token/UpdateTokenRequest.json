@@ -1,0 +1,44 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class UpdateTokenRequest",
+  "allOf" : [ {
+    "type" : "object",
+    "properties" : {
+      "paymentProductId" : {
+        "type" : "integer",
+        "maximum" : 2147483647
+      }
+    },
+    "required" : [ "paymentProductId" ]
+  }, {
+    "oneOf" : [ {
+      "properties" : {
+        "sepaDirectDebit" : {
+          "$ref" : "definitions.json#/definitions/TokenSepaDirectDebitWithoutCreditor"
+        }
+      },
+      "required" : [ "sepaDirectDebit" ]
+    }, {
+      "properties" : {
+        "nonSepaDirectDebit" : {
+          "$ref" : "definitions.json#/definitions/TokenNonSepaDirectDebit"
+        }
+      },
+      "required" : [ "nonSepaDirectDebit" ]
+    }, {
+      "properties" : {
+        "card" : {
+          "$ref" : "definitions.json#/definitions/TokenCard"
+        }
+      },
+      "required" : [ "card" ]
+    }, {
+      "properties" : {
+        "eWallet" : {
+          "$ref" : "definitions.json#/definitions/TokenEWallet"
+        }
+      },
+      "required" : [ "eWallet" ]
+    } ]
+  } ]
+}

@@ -1,0 +1,90 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions for refund calls",
+  "definitions" : {
+    "BankAccountBbanRefund" : {
+      "allOf" : [ {
+        "$ref" : "../definitions.json#/definitions/BankAccountBban"
+      }, {
+        "properties" : {
+          "bankCity" : {
+            "type" : "string"
+          },
+          "swiftCode" : {
+            "type" : "string"
+          }
+        }
+      } ]
+    },
+    "BankRefundMethodSpecificInput" : {
+      "allOf" : [ {
+        "type" : "object",
+        "properties" : {
+          "countryCode" : {
+            "type" : "string"
+          }
+        }
+      }, {
+        "oneOf" : [ {
+          "properties" : {
+            "bankAccountBban" : {
+              "$ref" : "#/definitions/BankAccountBbanRefund"
+            }
+          },
+          "required" : [ "bankAccountBban" ]
+        }, {
+          "properties" : {
+            "bankAccountIban" : {
+              "$ref" : "../definitions.json#/definitions/BankAccountIban"
+            }
+          },
+          "required" : [ "bankAccountIban" ]
+        }, {
+        } ]
+      } ]
+    },
+    "RefundCustomer" : {
+      "type" : "object",
+      "properties" : {
+        "address" : {
+          "$ref" : "../payment/definitions.json#/definitions/AddressPersonal"
+        },
+        "companyInformation" : {
+          "$ref" : "../definitions.json#/definitions/CompanyInformation"
+        },
+        "contactDetails" : {
+          "$ref" : "../definitions.json#/definitions/ContactDetailsBase"
+        }
+      }
+    },
+    "RefundReferences" : {
+      "type" : "object",
+      "properties" : {
+        "merchantReference" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RefundResult" : {
+      "allOf" : [ {
+        "$ref" : "../definitions.json#/definitions/AbstractOrderStatus"
+      }, {
+        "properties" : {
+          "refundOutput" : {
+            "$ref" : "../payment/definitions.json#/definitions/RefundOutput"
+          },
+          "status" : {
+            "$ref" : "#/definitions/RefundStatus"
+          },
+          "statusOutput" : {
+            "$ref" : "../definitions.json#/definitions/OrderStatusOutput"
+          }
+        }
+      } ]
+    },
+    "RefundStatus" : {
+      "type" : "string",
+      "enum" : [ "CREATED", "PENDING_APPROVAL", "REJECTED", "REFUND_REQUESTED", "CAPTURED", "REFUNDED", "CANCELLED" ]
+    }
+  }
+}

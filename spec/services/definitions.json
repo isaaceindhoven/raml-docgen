@@ -1,0 +1,95 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions for services calls",
+  "definitions" : {
+    "BankData" : {
+      "type" : "object",
+      "properties" : {
+        "newBankName" : {
+          "type" : "string"
+        },
+        "reformattedAccountNumber" : {
+          "type" : "string"
+        },
+        "reformattedBankCode" : {
+          "type" : "string"
+        },
+        "reformattedBranchCode" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BankDetails" : {
+      "type" : "object",
+      "properties" : {
+        "bankAccountBban" : {
+          "$ref" : "../definitions.json#/definitions/BankAccountBban"
+        },
+        "bankAccountIban" : {
+          "$ref" : "../definitions.json#/definitions/BankAccountIban"
+        }
+      }
+    },
+    "IINDetail" : {
+      "type" : "object",
+      "properties" : {
+        "isAllowedInContext" : {
+          "type" : "boolean"
+        },
+        "paymentProductId" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    },
+    "PaymentContext" : {
+      "type" : "object",
+      "properties" : {
+        "amountOfMoney" : {
+          "$ref" : "../definitions.json#/definitions/AmountOfMoney"
+        },
+        "countryCode" : {
+          "type" : "string"
+        },
+        "isRecurring" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "Swift" : {
+      "type" : "object",
+      "properties" : {
+        "bic" : {
+          "type" : "string"
+        },
+        "category" : {
+          "type" : "string"
+        },
+        "chipsUID" : {
+          "type" : "string"
+        },
+        "extraInfo" : {
+          "type" : "string"
+        },
+        "poBoxCountry" : {
+          "type" : "string"
+        },
+        "poBoxLocation" : {
+          "type" : "string"
+        },
+        "poBoxNumber" : {
+          "type" : "string"
+        },
+        "poBoxZip" : {
+          "type" : "string"
+        },
+        "routingBic" : {
+          "type" : "string"
+        },
+        "services" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class CreatePaymentRequest",
+  "allOf" : [ {
+    "type" : "object",
+    "properties" : {
+      "encryptedCustomerInput" : {
+        "type" : "string"
+      },
+      "fraudFields" : {
+        "$ref" : "../definitions.json#/definitions/FraudFields"
+      },
+      "order" : {
+        "$ref" : "definitions.json#/definitions/Order"
+      }
+    },
+    "required" : [ "order" ]
+  }, {
+    "oneOf" : [ {
+      "properties" : {
+        "cashPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/CashPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "cashPaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "directDebitPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/NonSepaDirectDebitPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "directDebitPaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "sepaDirectDebitPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/SepaDirectDebitPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "sepaDirectDebitPaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "redirectPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/RedirectPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "redirectPaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "cardPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/CardPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "cardPaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "invoicePaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/InvoicePaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "invoicePaymentMethodSpecificInput" ]
+    }, {
+      "properties" : {
+        "bankTransferPaymentMethodSpecificInput" : {
+          "$ref" : "definitions.json#/definitions/BankTransferPaymentMethodSpecificInput"
+        }
+      },
+      "required" : [ "bankTransferPaymentMethodSpecificInput" ]
+    }, {
+    } ]
+  } ]
+}

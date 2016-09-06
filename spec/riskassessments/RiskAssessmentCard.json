@@ -1,0 +1,13 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class RiskAssessmentCard",
+  "allOf" : [ {
+    "$ref" : "definitions.json#/definitions/RiskAssessment"
+  }, {
+    "properties" : {
+      "card" : {
+        "$ref" : "../definitions.json#/definitions/Card"
+      }
+    }
+  } ]
+}

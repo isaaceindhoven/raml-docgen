@@ -1,0 +1,44 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class CreatePayoutRequest",
+  "allOf" : [ {
+    "type" : "object",
+    "properties" : {
+      "amountOfMoney" : {
+        "$ref" : "../definitions.json#/definitions/AmountOfMoney"
+      },
+      "customer" : {
+        "$ref" : "definitions.json#/definitions/PayoutCustomer"
+      },
+      "payoutDate" : {
+        "type" : "string"
+      },
+      "payoutText" : {
+        "type" : "string"
+      },
+      "references" : {
+        "$ref" : "definitions.json#/definitions/PayoutReferences"
+      },
+      "swiftCode" : {
+        "type" : "string"
+      }
+    },
+    "required" : [ "amountOfMoney", "customer", "payoutText", "references" ]
+  }, {
+    "oneOf" : [ {
+      "properties" : {
+        "bankAccountBban" : {
+          "$ref" : "../definitions.json#/definitions/BankAccountBban"
+        }
+      },
+      "required" : [ "bankAccountBban" ]
+    }, {
+      "properties" : {
+        "bankAccountIban" : {
+          "$ref" : "../definitions.json#/definitions/BankAccountIban"
+        }
+      },
+      "required" : [ "bankAccountIban" ]
+    } ]
+  } ]
+}

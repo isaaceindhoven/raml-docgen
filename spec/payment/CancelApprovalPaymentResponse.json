@@ -1,0 +1,10 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class CancelApprovalPaymentResponse",
+  "type" : "object",
+  "properties" : {
+    "payment" : {
+      "$ref" : "definitions.json#/definitions/Payment"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class GetHostedCheckoutResponse",
+  "type" : "object",
+  "properties" : {
+    "createdPaymentOutput" : {
+      "$ref" : "definitions.json#/definitions/CreatedPaymentOutput"
+    },
+    "status" : {
+      "$ref" : "definitions.json#/definitions/HostedCheckoutStatus"
+    }
+  }
+}

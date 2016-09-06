@@ -1,0 +1,66 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions for risk assessments calls",
+  "definitions" : {
+    "CustomerRiskAssessment" : {
+      "type" : "object",
+      "properties" : {
+        "billingAddress" : {
+          "$ref" : "../definitions.json#/definitions/Address"
+        },
+        "locale" : {
+          "type" : "string"
+        },
+        "personalInformation" : {
+          "$ref" : "#/definitions/PersonalInformationRiskAssessment"
+        },
+        "shippingAddress" : {
+          "$ref" : "../payment/definitions.json#/definitions/AddressPersonal"
+        }
+      }
+    },
+    "OrderRiskAssessment" : {
+      "type" : "object",
+      "properties" : {
+        "additionalInput" : {
+          "$ref" : "../definitions.json#/definitions/AdditionalOrderInputAirlineData"
+        },
+        "amountOfMoney" : {
+          "$ref" : "../definitions.json#/definitions/AmountOfMoney"
+        },
+        "customer" : {
+          "$ref" : "#/definitions/CustomerRiskAssessment"
+        }
+      },
+      "required" : [ "amountOfMoney" ]
+    },
+    "PersonalInformationRiskAssessment" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "$ref" : "#/definitions/PersonalNameRiskAssessment"
+        }
+      }
+    },
+    "PersonalNameRiskAssessment" : {
+      "allOf" : [ {
+        "$ref" : "../definitions.json#/definitions/PersonalNameBase"
+      } ]
+    },
+    "RiskAssessment" : {
+      "type" : "object",
+      "properties" : {
+        "fraudFields" : {
+          "$ref" : "../definitions.json#/definitions/FraudFields"
+        },
+        "order" : {
+          "$ref" : "#/definitions/OrderRiskAssessment"
+        },
+        "paymentProductId" : {
+          "type" : "integer",
+          "maximum" : 2147483647
+        }
+      }
+    }
+  }
+}

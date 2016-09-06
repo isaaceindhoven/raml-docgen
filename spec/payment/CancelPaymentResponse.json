@@ -1,0 +1,13 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class CancelPaymentResponse",
+  "type" : "object",
+  "properties" : {
+    "cardPaymentMethodSpecificOutput" : {
+      "$ref" : "definitions.json#/definitions/CancelPaymentCardPaymentMethodSpecificOutput"
+    },
+    "payment" : {
+      "$ref" : "definitions.json#/definitions/Payment"
+    }
+  }
+}

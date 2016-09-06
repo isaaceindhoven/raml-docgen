@@ -1,0 +1,18 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class SessionRequest",
+  "type" : "object",
+  "properties" : {
+    "paymentProductFilters" : {
+      "$ref" : "definitions.json#/definitions/PaymentProductFiltersClientSession"
+    },
+    "tokens" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      },
+      "minItems" : 0,
+      "uniqueItems" : false
+    }
+  }
+}

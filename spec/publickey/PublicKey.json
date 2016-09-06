@@ -1,0 +1,14 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class PublicKey",
+  "type" : "object",
+  "properties" : {
+    "keyId" : {
+      "type" : "string"
+    },
+    "publicKey" : {
+      "type" : "string"
+    }
+  },
+  "required" : [ "keyId", "publicKey" ]
+}

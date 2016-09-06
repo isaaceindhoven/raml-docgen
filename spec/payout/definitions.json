@@ -1,0 +1,64 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions for payout calls",
+  "definitions" : {
+    "PayoutCustomer" : {
+      "type" : "object",
+      "properties" : {
+        "address" : {
+          "$ref" : "../definitions.json#/definitions/Address"
+        },
+        "companyInformation" : {
+          "$ref" : "../definitions.json#/definitions/CompanyInformation"
+        },
+        "contactDetails" : {
+          "$ref" : "../definitions.json#/definitions/ContactDetailsBase"
+        },
+        "merchantCustomerId" : {
+          "type" : "string"
+        },
+        "name" : {
+          "$ref" : "../payment/definitions.json#/definitions/PersonalName"
+        }
+      },
+      "required" : [ "address", "name" ]
+    },
+    "PayoutReferences" : {
+      "type" : "object",
+      "properties" : {
+        "invoiceNumber" : {
+          "type" : "string"
+        },
+        "merchantOrderId" : {
+          "type" : "integer",
+          "maximum" : 9223372036854775807
+        },
+        "merchantReference" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "merchantReference" ]
+    },
+    "PayoutResult" : {
+      "allOf" : [ {
+        "$ref" : "../definitions.json#/definitions/AbstractOrderStatus"
+      }, {
+        "properties" : {
+          "payoutOutput" : {
+            "$ref" : "../payment/definitions.json#/definitions/OrderOutput"
+          },
+          "status" : {
+            "$ref" : "#/definitions/PayoutStatus"
+          },
+          "statusOutput" : {
+            "$ref" : "../definitions.json#/definitions/OrderStatusOutput"
+          }
+        }
+      } ]
+    },
+    "PayoutStatus" : {
+      "type" : "string",
+      "enum" : [ "CREATED", "REJECTED", "REJECTED_CREDIT", "PENDING_APPROVAL", "PAYOUT_REQUESTED", "ACCOUNT_CREDITED", "REVERSED", "CANCELLED" ]
+    }
+  }
+}

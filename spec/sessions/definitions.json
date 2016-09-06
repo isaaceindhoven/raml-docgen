@@ -1,0 +1,17 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Global definitions for sessions calls",
+  "definitions" : {
+    "PaymentProductFiltersClientSession" : {
+      "type" : "object",
+      "properties" : {
+        "exclude" : {
+          "$ref" : "../definitions.json#/definitions/PaymentProductFilter"
+        },
+        "restrictTo" : {
+          "$ref" : "../definitions.json#/definitions/PaymentProductFilter"
+        }
+      }
+    }
+  }
+}

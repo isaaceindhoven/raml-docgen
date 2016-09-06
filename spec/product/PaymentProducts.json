@@ -1,0 +1,15 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class PaymentProducts",
+  "type" : "object",
+  "properties" : {
+    "paymentProducts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "definitions.json#/definitions/PaymentProduct"
+      },
+      "minItems" : 0,
+      "uniqueItems" : false
+    }
+  }
+}

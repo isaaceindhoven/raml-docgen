@@ -1,0 +1,13 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "class PaymentApprovalResponse",
+  "type" : "object",
+  "properties" : {
+    "payment" : {
+      "$ref" : "definitions.json#/definitions/Payment"
+    },
+    "paymentMethodSpecificOutput" : {
+      "$ref" : "definitions.json#/definitions/ApprovePaymentCardPaymentMethodSpecificOutput"
+    }
+  }
+}
