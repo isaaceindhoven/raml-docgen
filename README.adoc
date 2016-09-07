@@ -1,3 +1,26 @@
 = RAML2asciidoc
 
 Convert your RAML (0.8 or 1.0) specification to asciidoc.
+
+== Usage
+This utility can be executed from the command line.
+
+[source, javascript]
+.Render a file called 'spec.raml' using default template
+----
+node index.js
+----
+
+[source, javascript]
+.Render a file called 'api.raml' using default template
+----
+node index.js -i api.raml
+node index.js --input api.raml
+----
+
+[source, javascript]
+.Render a file called 'api.raml' using custom template
+----
+node index.js -i api.raml -t myTemplate
+node index.js --input api.raml --template myTemplate
+----
