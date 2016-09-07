@@ -24,7 +24,7 @@ console.log("Adding parent nodes");
 apiJSON.resources.forEach(setParents);
 
 console.log("rendering asciidoc");
-var res = nunjucks.render('nunjucks_templates/' + template + '/template.adoc', {
+var res = nunjucks.render('templates/' + template + '/template.adoc', {
   api: apiJSON
 });
 
