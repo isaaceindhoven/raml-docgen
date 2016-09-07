@@ -8,32 +8,29 @@ var specName = process.argv[2];
 var fName = path.resolve(__dirname, "spec/" + specName);
 var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
-var endpointArray = [];
 
 console.log("Adding parent nodes");
 apiJSON.resources.forEach(setParents);
 
 console.log("rendering asciidoc");
 var res = nunjucks.render('template.adoc', {
-  generic: apiJSON,
-  endpoints: endpointArray
+  api: apiJSON
 });
 
 writeAsciidoc(res);
 console.log("DONE");
 
 /**
- * Add parentPath variable
- * Used for rendering complete paths
- * Also converts methods to UPPERCASE
- */
+* Add parentPath variable
+* Used for rendering complete paths
+* Also converts methods to UPPERCASE
+*/
 function setParents(item) {
   // Only print path and methods if this endpoint actually has methods - otherwise skip
   if(item.methods != undefined && item.relativeUri != undefined) {
     item.methods.forEach(function(m){
       m.method = m.method.toUpperCase();
     })
-    endpointArray.push(item);
   }
 
   // Item has children, output them too.
@@ -42,6 +39,12 @@ function setParents(item) {
     item.resources.forEach(function(item) {
       if(parent.parentPath != undefined) item.parentPath = parent.parentPath + "" + parent.relativeUri;
       else item.parentPath = parent.relativeUri;
+      if(parent.uriParameters != undefined){
+        if(item.uriParameters == undefined) item.uriParameters = {};
+        for (var key in parent.uriParameters) {
+          item.uriParameters[key] = parent.uriParameters[key];
+        }
+      }
       setParents(item);
     });
   }

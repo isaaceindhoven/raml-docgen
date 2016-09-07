@@ -1,0 +1,15 @@
+
+==== Responses
+{% for code, data in method.responses %}                 {# foreach Responses #}
+===== {{code}}
+{% for type, body in data.body %}                   {# foreach Response Body #}
+*Content-Type*: `{{type}}`
+{% if body.example %}                               {# if Response Body example #}
+.Example response body
+[source,json]
+----
+{{body.example | safe}}
+----
+{% endif %}                                         {# if Response Body example #}
+{% endfor %}                                        {# foreach Response Body #}
+{% endfor %}                                        {# foreach Responses #}

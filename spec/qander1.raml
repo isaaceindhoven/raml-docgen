@@ -186,6 +186,11 @@ baseUri: http://dealerapp.logic-dev-lsn-n.isaac.local:8080/rest/v1
                   "customerDriversLicenseUploaded": false
                 }
     /{testDriveId}:
+      uriParameters:
+       testDriveId:
+         displayName: Test Drive ID
+         description: ID of the test drive
+         type: integer
       get:
         responses:
           200:

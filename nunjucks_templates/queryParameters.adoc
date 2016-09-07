@@ -1,0 +1,14 @@
+{# Query paramters for a method #}
+==== Query Parameters
+
+[Options="header"]
+|===
+| Name | Example | Type
+{% for name, data in method.queryParameters %}           {# foreach Query Parameters #}
+| {{data.name}} +
+{% if data.required %}_required_
+{% else %}_optional_{% endif %}
+| {{data.example}}
+| {{data.type}}
+{% endfor %}                                        {# foreach Query Parameters #}
+|===

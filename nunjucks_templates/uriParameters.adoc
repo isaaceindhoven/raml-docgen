@@ -1,0 +1,12 @@
+{# URI parameters for an endpoint #}
+==== URI Parameters
+
+[options="header"]
+|===
+| Name | Description | Type
+{% for name, data in endpoint.uriParameters %}              {# foreach URI Parameters #}
+| {{data.name}}
+| {{data.description}}
+| {{data.type}}
+{% endfor %}                                                {# foreach URI Parameters #}
+|===

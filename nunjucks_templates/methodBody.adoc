@@ -1,0 +1,26 @@
+{# Method request body #}
+==== Request
+{% for type, data in method.body %}                      {# foreach Method Body #}
+*Content-Type*: `{{type}}`
+{% if data.example %}                               {# if Method Body Example #}
+.Example request body
+[source,json]
+----
+{{data.example | safe}}
+----
+{% endif %}                                         {# if Method Body Example #}
+{% if data.formParameters %}                        {# if Method Form Parameters #}
+==== Form Variables
+[options="header"]
+|===
+| Name | Example | Type
+{% for name, data in data.formParameters %}         {# foreach Method Form Parameters #}
+| {{data.displayName}}{% if data.required %} +
+_required_{% else %} +
+_optional_{% endif %}
+| {{data.example}}
+| {{data.type}}
+{% endfor %}                                        {# foreach Method Form Parameters #}
+|===
+{% endif %}                                         {# if Method Form Parameters #}
+{% endfor %}                                        {# foreach Method Body #}

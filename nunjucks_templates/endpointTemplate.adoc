@@ -1,0 +1,37 @@
+{% for method in endpoint.methods %}
+=== {{method.method}} {{endpoint.parentPath}}{{ endpoint.relativeUri }}
+{% if method.description %}
+==== Description
+{{method.description}}
+{% endif %}
+{% if method.protocols %}
+==== Protocols
+{% for p in method.protocols %}
+{{p}}
+{% endfor %}
+{% endif %}
+
+{% if endpoint.uriParameters %}
+{% include "uriParameters.adoc" %}
+{% endif %}
+
+{% if method.queryParameters %}
+{% include "queryParameters.adoc" %}
+{% endif %}
+
+{% if method.body %}
+{% include "methodBody.adoc" %}
+{% endif %}
+
+{% if method.responses %}
+{% include "methodResponse.adoc" %}
+{% endif %}
+
+<<<
+
+{% endfor %}
+
+{# Call this template recursively for children of the current endpoint #}
+{% for endpoint in endpoint.resources %}
+{% include "endpointTemplate.adoc" %}
+{% endfor %}
