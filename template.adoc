@@ -1,11 +1,22 @@
 = {{title}}
 :toc:
-:doctype: book
-{{author}}  {% if author_email_present %} <{{author_email}}>
-{{version}}
+:doctype: book{% if author %}
+{{author}}{% if author_email %} <{{author_email}}>{% endif %}{% endif %}{%if version %}
+{{version}}{% endif %}
 
 {{description}}
 
+== Paths
+
 {% for e in endpoints %}
-== {{e.method}} {{ e.uri }}
+{% for m in e.methods %}
+=== {{m.method}} {{e.parentPath}}{{ e.relativeUri }}{% if m.description %}
+==== Description
+{{m.description}}{% endif %}{% if m.protocols %}
+==== Protocols{% for p in m.protocols %}
+{{p}}{% endfor %}{% endif %}
+{% for r in m.responses %} {# //TODO: Make this work #}
+Hello, world! +
+{% endfor %}
+{% endfor %}
 {% endfor %}

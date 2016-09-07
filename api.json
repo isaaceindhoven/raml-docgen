@@ -1,153 +1,73 @@
 {
-  "title": "GlobalCollect client-to-server (C2S) API",
+  "title": "LSNL Dealer App REST Api",
   "version": "v1",
-  "baseUri": "https://{domainname}/client/{version}",
-  "baseUriParameters": {
-    "domainname": {
-      "name": "domainname",
-      "displayName": "domainname",
-      "type": "string",
-      "required": true,
-      "default": "api.globalcollect.com",
-      "repeat": false,
-      "description": "domainname",
-      "__METADATA__": {
-        "primitiveValuesMeta": {
-          "displayName": {
-            "calculated": true
-          },
-          "type": {
-            "insertedAsDefault": true
-          },
-          "required": {
-            "insertedAsDefault": true
-          },
-          "repeat": {
-            "insertedAsDefault": true
-          }
-        }
-      }
-    },
-    "version": {
-      "name": "version",
-      "displayName": "version",
-      "type": "string",
-      "required": true,
-      "repeat": false,
-      "enum": [
-        "v1"
-      ],
-      "__METADATA__": {
-        "calculated": true,
-        "primitiveValuesMeta": {
-          "displayName": {
-            "calculated": true
-          },
-          "type": {
-            "insertedAsDefault": true
-          },
-          "required": {
-            "insertedAsDefault": true
-          },
-          "repeat": {
-            "insertedAsDefault": true
-          },
-          "enum": {
-            "calculated": true
-          }
-        }
-      }
-    }
-  },
+  "baseUri": "http://dealerapp.logic-dev-lsn-n.isaac.local:8080/rest/v1",
   "protocols": [
-    "HTTP",
-    "HTTPS"
-  ],
-  "schemas": [
-    {
-      "ErrorResponse": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
-    },
-    {
-      "Directory": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class Directory\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"entries\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/DirectoryEntry\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
-    },
-    {
-      "PaymentProductResponse": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductResponse\",\n  \"allOf\" : [ {\n    \"$ref\" : \"definitions.json#/definitions/PaymentProduct\"\n  } ]\n}"
-    },
-    {
-      "PaymentProducts": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProducts\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"paymentProducts\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/PaymentProduct\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
-    },
-    {
-      "PaymentProductGroupResponse": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductGroupResponse\",\n  \"allOf\" : [ {\n    \"$ref\" : \"definitions.json#/definitions/PaymentProductGroup\"\n  } ]\n}"
-    },
-    {
-      "PaymentProductGroups": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductGroups\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"paymentProductGroups\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/PaymentProductGroup\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
-    },
-    {
-      "PublicKey": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PublicKey\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"keyId\" : {\n      \"type\" : \"string\"\n    },\n    \"publicKey\" : {\n      \"type\" : \"string\"\n    }\n  },\n  \"required\" : [ \"keyId\", \"publicKey\" ]\n}"
-    },
-    {
-      "GetIINDetailsRequest": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class GetIINDetailsRequest\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"bin\" : {\n      \"type\" : \"string\"\n    },\n    \"paymentContext\" : {\n      \"$ref\" : \"definitions.json#/definitions/PaymentContext\"\n    }\n  },\n  \"required\" : [ \"bin\" ]\n}"
-    },
-    {
-      "GetIINDetailsResponse": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class GetIINDetailsResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"coBrands\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/IINDetail\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    },\n    \"countryCode\" : {\n      \"type\" : \"string\"\n    },\n    \"isAllowedInContext\" : {\n      \"type\" : \"boolean\"\n    },\n    \"paymentProductId\" : {\n      \"type\" : \"integer\",\n      \"maximum\" : 2147483647\n    }\n  }\n}"
-    },
-    {
-      "ConvertAmount": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ConvertAmount\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"convertedAmount\" : {\n      \"type\" : \"integer\",\n      \"maximum\" : 9223372036854775807\n    }\n  }\n}"
-    }
-  ],
-  "traits": [
-    {
-      "canReturn400": {
-        "responses": {
-          "400": {
-            "code": "400",
-            "body": {
-              "application/json": {
-                "name": "application/json",
-                "schema": "ErrorResponse",
-                "example": "{\n  \"errorId\": \"15eabcd5-30b3-479b-ae03-67bb351c07e6-00000092\",\n  \"errors\": [\n    {\n      \"code\": \"20000000\",\n      \"propertyName\": \"bankAccountBban.accountNumber\",\n      \"message\": \"PARAMETER_NOT_FOUND_IN_REQUEST\"\n    }\n  ]\n}\n",
-                "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
-              }
-            },
-            "description": "There was an error in the request"
-          }
-        },
-        "name": "canReturn400"
-      }
-    }
+    "HTTP"
   ],
   "resources": [
     {
-      "relativeUri": "/{customerId}",
-      "uriParameters": {
-        "customerId": {
-          "name": "customerId",
-          "displayName": "customerId",
-          "type": "string",
-          "required": true,
-          "repeat": false,
+      "relativeUri": "/dealer",
+      "methods": [
+        {
+          "responses": {
+            "200": {
+              "code": "200",
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"id\": 13,\n  \"name\": \"C. Ardealer\",\n  \"address\": \"Straat 1\\n9999 AA Plaats\",\n  \"phone\": \"06-12345679\",\n  \"email\": \"c@ardealer.net\",\n  \"externalReference\": \"000020\",\n  \"dealerLicensePlates\": [\n    \"AA-BB-11\",\n    \"1-ABC-23\"\n  ]\n}\n"
+                }
+              }
+            }
+          },
+          "protocols": [
+            "HTTP"
+          ],
+          "method": "get",
           "__METADATA__": {
-            "calculated": true,
             "primitiveValuesMeta": {
-              "displayName": {
+              "protocols": {
                 "calculated": true
-              },
-              "type": {
-                "insertedAsDefault": true
-              },
-              "required": {
-                "insertedAsDefault": true
-              },
-              "repeat": {
-                "insertedAsDefault": true
+              }
+            }
+          }
+        },
+        {
+          "responses": {
+            "200": {
+              "code": "200",
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"id\": 13,\n  \"name\": \"C. Ardealer\",\n  \"address\": \"Straat 1\\n9999 AA Plaats\",\n  \"phone\": \"06-12345679\",\n  \"email\": \"c@ardealer.net\",\n  \"externalReference\": \"000020\",\n  \"active\": true\n}\n"
+                }
+              }
+            }
+          },
+          "body": {
+            "application/json": {
+              "name": "application/json",
+              "example": "{\n  \"id\": 13,\n  \"name\": \"C. Ardealer\",\n  \"address\": \"Straat 1\\n9999 AA Plaats\",\n  \"phone\": \"06-12345679\",\n  \"email\": \"c@ardealer.net\",\n  \"externalReference\": \"000020\"\n}\n"
+            }
+          },
+          "protocols": [
+            "HTTP"
+          ],
+          "description": "id is verplicht. Als andere velden ontbreken, dan worden ze niet overschreven.\n",
+          "method": "post",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "protocols": {
+                "calculated": true
               }
             }
           }
         }
-      },
+      ],
       "resources": [
         {
-          "relativeUri": "/products",
+          "relativeUri": "/login",
           "methods": [
             {
               "responses": {
@@ -156,134 +76,391 @@
                   "body": {
                     "application/json": {
                       "name": "application/json",
-                      "schema": "PaymentProducts",
-                      "example": "{\n  \"paymentProducts\": [\n    {\n      \"allowsRecurring\": true,\n      \"allowsTokenization\": true,\n      \"displayHints\": {\n        \"displayOrder\": 20,\n        \"label\": \"Visa\",\n        \"logo\": \"/templates/master/global/css/img/ppimages/pp_logo_1_v1.png\"\n      },\n      \"id\": 1,\n      \"maxAmount\": 1000000,\n      \"mobileIntegrationLevel\": \"OPTIMISED_SUPPORT\",\n      \"paymentMethod\": \"card\",\n      \"paymentProductGroup\": \"cards\"\n    },\n    {\n      \"allowsRecurring\": true,\n      \"allowsTokenization\": true,\n      \"displayHints\": {\n        \"displayOrder\": 19,\n        \"label\": \"American Express\",\n        \"logo\": \"/templates/master/global/css/img/ppimages/pp_logo_2_v1.png\"\n      },\n      \"id\": 2,\n      \"maxAmount\": 1000000,\n      \"mobileIntegrationLevel\": \"OPTIMISED_SUPPORT\",\n      \"paymentMethod\": \"card\",\n      \"paymentProductGroup\": \"cards\"\n    },\n    {\n      \"allowsRecurring\": true,\n      \"allowsTokenization\": true,\n      \"displayHints\": {\n        \"displayOrder\": 18,\n        \"label\": \"MasterCard\",\n        \"logo\": \"/templates/master/global/css/img/ppimages/pp_logo_3_v1.png\"\n      },\n      \"id\": 3,\n      \"maxAmount\": 1000000,\n      \"mobileIntegrationLevel\": \"OPTIMISED_SUPPORT\",\n      \"paymentMethod\": \"card\",\n      \"paymentProductGroup\": \"cards\"\n    }\n  ]\n}\n",
-                      "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProducts\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"paymentProducts\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/PaymentProduct\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
+                      "example": "{\n  \"status\": \"SUCCESS\",\n  \"sessionId\": \"xxxxx\",\n  \"rememberMeToken\": \"yyyyy\"\n}\n"
+                    },
+                    "application/json+failure-example": {
+                      "name": "application/json+failure-example",
+                      "example": "{\n  \"status\": \"FAILED\"\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"username\": \"dealerx\",\n  \"password\": \"P@ssw0rd\",\n  \"deviceId\": \"6zZlCS9PLFAs/mBHEAHKXF0t\"\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/login",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "login"
+          ]
+        },
+        {
+          "relativeUri": "/renewLogin",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"status\": \"SUCCESS\",\n  \"sessionId\": \"xxxxx\",\n  \"rememberMeToken\": \"yyyyy\"\n}\n"
+                    },
+                    "application/json+failure-example": {
+                      "name": "application/json+failure-example",
+                      "example": "{\n  \"status\": \"FAILED\"\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"token\": \"yyyy\"\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/renewLogin",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "renewLogin"
+          ]
+        },
+        {
+          "relativeUri": "/logout",
+          "methods": [
+            {
+              "responses": {
+                "204": {
+                  "code": "204"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/logout",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "logout"
+          ]
+        },
+        {
+          "relativeUri": "/changePassword",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"status\": \"SUCCESS\",\n  \"sessionId\": \"xxxxx\",\n  \"rememberMeToken\": \"yyyyy\"\n}\n"
+                    },
+                    "application/json+failure-example": {
+                      "name": "application/json+failure-example",
+                      "example": "{\n  \"status\": \"FAILED\"\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"username\": \"dealerx\",\n  \"password\": \"P@ssw0rd\",\n  \"newPassword\": \"W@chtw00rd\",\n  \"deviceId\": \"6zZlCS9PLFAs/mBHEAHKXF0t\"\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/changePassword",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "changePassword"
+          ]
+        },
+        {
+          "relativeUri": "/testdrives",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "[\n  {\n    \"id\": 1,\n    \"customerName\": \"Hans de Vries\",\n    \"customerPhone\": \"06-12345678\",\n    \"customerEmail\": \"Hans@devries.nl\",\n    \"started\": \"2015-09-17 09:13\",\n    \"returned\": \"2015-09-17 09:48\",\n    \"duration\": 35,\n    \"licensePlate\": \"11-22-AA\",\n    \"licensePlateDealer\": \"12-ABC-3\",\n    \"customerDriversLicenseUploaded\": false\n  }\n]\n"
                     }
                   }
                 }
               },
               "protocols": [
-                "HTTPS"
+                "HTTP"
               ],
-              "queryParameters": {
-                "countryCode": {
-                  "name": "countryCode",
-                  "displayName": "countryCode",
-                  "type": "string",
-                  "required": true,
-                  "example": "NL",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
+              "description": "Geeft de testritten van de afgelopen 30 dagen.",
+              "method": "get",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            },
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"id\": 1,\n  \"customerName\": \"Hans de Vries\",\n  \"customerPhone\": \"06-12345678\",\n  \"customerEmail\": \"Hans@devries.nl\",\n  \"started\": \"2015-09-17 09:13\",\n  \"returned\": \"2015-09-17 09:48\",\n  \"duration\": 35,\n  \"licensePlate\": \"11-22-AA\",\n  \"licensePlateDealer\": \"12-ABC-3\",\n  \"customerDriversLicenseUploaded\": false\n}\n"
                     }
                   }
-                },
-                "currencyCode": {
-                  "name": "currencyCode",
-                  "displayName": "currencyCode",
-                  "type": "string",
-                  "required": true,
-                  "example": "EUR",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
+                }
+              },
+              "body": {
+                "multipart/form-data": {
+                  "name": "multipart/form-data",
+                  "formParameters": {
+                    "customerName": {
+                      "name": "customerName",
+                      "displayName": "customerName",
+                      "type": "string",
+                      "required": false,
+                      "example": "Hans de Vries",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
                       }
-                    }
-                  }
-                },
-                "locale": {
-                  "name": "locale",
-                  "displayName": "locale",
-                  "type": "string",
-                  "required": false,
-                  "example": "en_US",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
+                    },
+                    "customerPhone": {
+                      "name": "customerPhone",
+                      "displayName": "customerPhone",
+                      "type": "string",
+                      "required": false,
+                      "example": "06-12345678",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
                       }
-                    }
-                  }
-                },
-                "amount": {
-                  "name": "amount",
-                  "displayName": "amount",
-                  "type": "integer",
-                  "required": false,
-                  "example": "1000",
-                  "repeat": false,
-                  "maximum": 9223372036854776000,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
+                    },
+                    "customerEmail": {
+                      "name": "customerEmail",
+                      "displayName": "customerEmail",
+                      "type": "string",
+                      "required": false,
+                      "example": "hans@devries.nl",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
                       }
-                    }
-                  }
-                },
-                "isRecurring": {
-                  "name": "isRecurring",
-                  "displayName": "isRecurring",
-                  "type": "boolean",
-                  "required": false,
-                  "example": "true",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
+                    },
+                    "customerDriversLicense": {
+                      "name": "customerDriversLicense",
+                      "displayName": "customerDriversLicense",
+                      "type": "file",
+                      "required": false,
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
                       }
-                    }
-                  }
-                },
-                "hide": {
-                  "name": "hide",
-                  "displayName": "hide",
-                  "type": "string",
-                  "required": false,
-                  "example": "accountsOnFile",
-                  "repeat": true,
-                  "description": "hides accountsOnFile and/or fields from the response",
-                  "enum": [
-                    "accountsOnFile",
-                    "fields"
-                  ],
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
+                    },
+                    "licensePlate": {
+                      "name": "licensePlate",
+                      "displayName": "licensePlate",
+                      "type": "string",
+                      "required": false,
+                      "example": "11-22-AA",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "licensePlateDealer": {
+                      "name": "licensePlateDealer",
+                      "displayName": "licensePlateDealer",
+                      "type": "string",
+                      "required": false,
+                      "example": "12-ABC-3",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "carImage": {
+                      "name": "carImage",
+                      "displayName": "carImage",
+                      "type": "file",
+                      "required": false,
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
                       }
                     }
                   }
                 }
               },
-              "description": "Get payment products",
-              "method": "get",
-              "is": [
-                "canReturn400"
+              "protocols": [
+                "HTTP"
               ],
+              "method": "post",
               "__METADATA__": {
                 "primitiveValuesMeta": {
                   "protocols": {
@@ -295,17 +472,23 @@
           ],
           "resources": [
             {
-              "relativeUri": "/{paymentProductId}",
+              "relativeUri": "/{testDriveId}",
               "uriParameters": {
-                "paymentProductId": {
-                  "name": "paymentProductId",
-                  "displayName": "paymentProductId",
-                  "type": "integer",
+                "testDriveId": {
+                  "name": "testDriveId",
+                  "displayName": "testDriveId",
+                  "type": "string",
                   "required": true,
                   "repeat": false,
-                  "maximum": 2147483647,
                   "__METADATA__": {
+                    "calculated": true,
                     "primitiveValuesMeta": {
+                      "displayName": {
+                        "calculated": true
+                      },
+                      "type": {
+                        "insertedAsDefault": true
+                      },
                       "required": {
                         "insertedAsDefault": true
                       },
@@ -324,141 +507,14 @@
                       "body": {
                         "application/json": {
                           "name": "application/json",
-                          "schema": "PaymentProductResponse",
-                          "example": "{\n  \"allowsRecurring\": true,\n  \"allowsTokenization\": true,\n  \"displayHints\": {\n    \"displayOrder\": 20,\n    \"label\": \"Visa\",\n    \"logo\": \"/templates/master/global/css/img/ppimages/pp_logo_1_v1.png\"\n  },\n  \"fields\": [\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": true,\n        \"validators\": {\n          \"length\": {\n            \"maxLength\": 19,\n            \"minLength\": 12\n          },\n          \"luhn\": {\n            \n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 10,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"Card number:\",\n        \"mask\": \"{{9999}} {{9999}} {{9999}} {{9999}} {{999}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"**** **** **** ****\",\n        \"preferredInputType\": \"IntegerKeyboard\"\n      },\n      \"id\": \"cardNumber\",\n      \"type\": \"numericstring\"\n    },\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": true,\n        \"validators\": {\n          \"expirationDate\": {\n            \n          },\n          \"length\": {\n            \"maxLength\": 4,\n            \"minLength\": 4\n          },\n          \"regularExpression\": {\n            \"regularExpression\": \"(?:0[1-9]|1[0-2])[0-9]{2}\"\n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 20,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"Expiry date:\",\n        \"mask\": \"{{99}}/{{99}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"MM/YY\",\n        \"preferredInputType\": \"IntegerKeyboard\"\n      },\n      \"id\": \"expiryDate\",\n      \"type\": \"expirydate\"\n    },\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": false,\n        \"validators\": {\n          \"length\": {\n            \"maxLength\": 4,\n            \"minLength\": 3\n          },\n          \"regularExpression\": {\n            \"regularExpression\": \"^[0-9]{3}[0-9]?$\"\n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 24,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"CVV:\",\n        \"mask\": \"{{9999}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"123\",\n        \"preferredInputType\": \"IntegerKeyboard\",\n        \"tooltip\": {\n          \"image\": \"/templates/master/global/css/img/ppimages/ppf_cvv_v1.png\",\n          \"label\": \"The CVV is a 3 or 4 digit code embossed or imprinted on your card.\"\n        }\n      },\n      \"id\": \"cvv\",\n      \"type\": \"numericstring\"\n    }\n  ],\n  \"id\": 1,\n  \"maxAmount\": 1000000,\n  \"mobileIntegrationLevel\": \"OPTIMISED_SUPPORT\",\n  \"paymentMethod\": \"card\",\n  \"paymentProductGroup\": \"cards\"\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductResponse\",\n  \"allOf\" : [ {\n    \"$ref\" : \"definitions.json#/definitions/PaymentProduct\"\n  } ]\n}"
-                        }
-                      }
-                    },
-                    "400": {
-                      "code": "400",
-                      "body": {
-                        "application/json": {
-                          "name": "application/json",
-                          "schema": "ErrorResponse",
-                          "example": "{\n  \"errorId\": \"657b10da-d2f9-4088-a948-bf190ef516b1-00000213\",\n  \"errors\": [\n    {\n      \"code\": \"1070\",\n      \"message\": \"INVALID_PAYMENT_PRODUCT_ID\"\n    }\n  ]\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
+                          "example": "{\n  \"id\": 1,\n  \"customerName\": \"Hans de Vries\",\n  \"customerPhone\": \"06-12345678\",\n  \"customerEmail\": \"Hans@devries.nl\",\n  \"started\": \"2015-09-17 09:13\",\n  \"returned\": \"2015-09-17 09:48\",\n  \"duration\": 35,\n  \"licensePlate\": \"11-22-AA\",\n  \"licensePlateDealer\": \"12-ABC-3\"\n}\n"
                         }
                       }
                     }
                   },
                   "protocols": [
-                    "HTTPS"
+                    "HTTP"
                   ],
-                  "queryParameters": {
-                    "countryCode": {
-                      "name": "countryCode",
-                      "displayName": "countryCode",
-                      "type": "string",
-                      "required": true,
-                      "example": "NL",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "currencyCode": {
-                      "name": "currencyCode",
-                      "displayName": "currencyCode",
-                      "type": "string",
-                      "required": true,
-                      "example": "EUR",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "locale": {
-                      "name": "locale",
-                      "displayName": "locale",
-                      "type": "string",
-                      "required": false,
-                      "example": "en_US",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "amount": {
-                      "name": "amount",
-                      "displayName": "amount",
-                      "type": "integer",
-                      "required": false,
-                      "example": "1000",
-                      "repeat": false,
-                      "maximum": 9223372036854776000,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "isRecurring": {
-                      "name": "isRecurring",
-                      "displayName": "isRecurring",
-                      "type": "boolean",
-                      "required": false,
-                      "example": "true",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "hide": {
-                      "name": "hide",
-                      "displayName": "hide",
-                      "type": "string",
-                      "required": false,
-                      "example": "accountsOnFile",
-                      "repeat": true,
-                      "description": "hides accountsOnFile and/or fields from the response",
-                      "enum": [
-                        "accountsOnFile",
-                        "fields"
-                      ],
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "description": "Get payment product",
                   "method": "get",
                   "__METADATA__": {
                     "primitiveValuesMeta": {
@@ -471,7 +527,7 @@
               ],
               "resources": [
                 {
-                  "relativeUri": "/directory",
+                  "relativeUri": "/return",
                   "methods": [
                     {
                       "responses": {
@@ -480,70 +536,15 @@
                           "body": {
                             "application/json": {
                               "name": "application/json",
-                              "schema": "Directory",
-                              "example": "{\n  \"entries\" : [ {\n    \"countryNames\" : [ \"Nederland\" ],\n    \"issuerId\" : \"ABNANL2A\",\n    \"issuerList\" : \"short\",\n    \"issuerName\" : \"ABN Amro Bank\"\n  }, {\n    \"countryNames\" : [ \"Nederland\" ],\n    \"issuerId\" : \"ASNBNL21\",\n    \"issuerList\" : \"long\",\n    \"issuerName\" : \"ASN Bank\"\n  } ]\n}\n",
-                              "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class Directory\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"entries\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/DirectoryEntry\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
-                            }
-                          }
-                        },
-                        "404": {
-                          "code": "404",
-                          "body": {
-                            "application/json": {
-                              "name": "application/json",
-                              "schema": "ErrorResponse",
-                              "example": "{\n  \"errorId\": \"3caa7750-a076-48b2-9402-3cb9eea613a6-00001532\",\n  \"errors\": [\n    {\n      \"code\": \"210390\",\n      \"message\": \"NO DIRECTORY FOUND\"\n    }\n  ]\n}\n",
-                              "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
+                              "example": "{\n  \"id\": 1,\n  \"customerName\": \"Hans de Vries\",\n  \"customerPhone\": \"06-12345678\",\n  \"customerEmail\": \"Hans@devries.nl\",\n  \"started\": \"2015-09-17 09:13\",\n  \"returned\": \"2015-09-17 09:48\",\n  \"duration\": 35,\n  \"licensePlate\": \"11-22-AA\",\n  \"licensePlateDealer\": \"12-ABC-3\"\n}\n"
                             }
                           }
                         }
                       },
                       "protocols": [
-                        "HTTPS"
+                        "HTTP"
                       ],
-                      "queryParameters": {
-                        "countryCode": {
-                          "name": "countryCode",
-                          "displayName": "countryCode",
-                          "type": "string",
-                          "required": true,
-                          "example": "NL",
-                          "repeat": false,
-                          "__METADATA__": {
-                            "primitiveValuesMeta": {
-                              "displayName": {
-                                "calculated": true
-                              },
-                              "repeat": {
-                                "insertedAsDefault": true
-                              }
-                            }
-                          }
-                        },
-                        "currencyCode": {
-                          "name": "currencyCode",
-                          "displayName": "currencyCode",
-                          "type": "string",
-                          "required": true,
-                          "example": "EUR",
-                          "repeat": false,
-                          "__METADATA__": {
-                            "primitiveValuesMeta": {
-                              "displayName": {
-                                "calculated": true
-                              },
-                              "repeat": {
-                                "insertedAsDefault": true
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "description": "Get payment product directory",
-                      "method": "get",
-                      "is": [
-                        "canReturn400"
-                      ],
+                      "method": "post",
                       "__METADATA__": {
                         "primitiveValuesMeta": {
                           "protocols": {
@@ -553,7 +554,7 @@
                       }
                     }
                   ],
-                  "displayName": "/directory",
+                  "displayName": "/return",
                   "__METADATA__": {
                     "primitiveValuesMeta": {
                       "displayName": {
@@ -562,11 +563,126 @@
                     }
                   },
                   "relativeUriPathSegments": [
-                    "directory"
+                    "return"
+                  ]
+                },
+                {
+                  "relativeUri": "/car",
+                  "methods": [
+                    {
+                      "responses": {
+                        "200": {
+                          "code": "200",
+                          "body": {
+                            "image/*": {
+                              "name": "image/*"
+                            }
+                          },
+                          "description": "De foto van de auto dat bij deze testrit geupload is."
+                        }
+                      },
+                      "protocols": [
+                        "HTTP"
+                      ],
+                      "queryParameters": {
+                        "maxWidth": {
+                          "name": "maxWidth",
+                          "displayName": "maxWidth",
+                          "type": "string",
+                          "required": false,
+                          "example": "100",
+                          "repeat": false,
+                          "__METADATA__": {
+                            "primitiveValuesMeta": {
+                              "displayName": {
+                                "calculated": true
+                              },
+                              "type": {
+                                "insertedAsDefault": true
+                              },
+                              "required": {
+                                "insertedAsDefault": true
+                              },
+                              "repeat": {
+                                "insertedAsDefault": true
+                              }
+                            }
+                          }
+                        },
+                        "maxHeight": {
+                          "name": "maxHeight",
+                          "displayName": "maxHeight",
+                          "type": "string",
+                          "required": false,
+                          "example": "120",
+                          "repeat": false,
+                          "__METADATA__": {
+                            "primitiveValuesMeta": {
+                              "displayName": {
+                                "calculated": true
+                              },
+                              "type": {
+                                "insertedAsDefault": true
+                              },
+                              "required": {
+                                "insertedAsDefault": true
+                              },
+                              "repeat": {
+                                "insertedAsDefault": true
+                              }
+                            }
+                          }
+                        },
+                        "encoding": {
+                          "name": "encoding",
+                          "displayName": "encoding",
+                          "type": "string",
+                          "required": false,
+                          "example": "base64",
+                          "repeat": false,
+                          "__METADATA__": {
+                            "primitiveValuesMeta": {
+                              "displayName": {
+                                "calculated": true
+                              },
+                              "type": {
+                                "insertedAsDefault": true
+                              },
+                              "required": {
+                                "insertedAsDefault": true
+                              },
+                              "repeat": {
+                                "insertedAsDefault": true
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "description": "Alle parameters zijn optioneel. Als één van de parameters maxWidth of maxHeight niet wordt meegegeven of nul is, dan wordt hij geacht gelijk te zijn aan de andere. Als beide niet worden meegegeven of beide nul zijn, dan wordt het originele bestand teruggegeven.\nAls encoding gelijk is aan de string \"base64\", dan wordt het plaatje als base64 teruggestuurd. De Content-Type header van de response is dan (bijvoorbeeld) \"image/png;base64\", en het plaatje kan ingeladen worden in een image tag door src=\"data:\" + contentType + \",\" + base64data in te stellen.\n",
+                      "method": "get",
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "protocols": {
+                            "calculated": true
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "displayName": "/car",
+                  "__METADATA__": {
+                    "primitiveValuesMeta": {
+                      "displayName": {
+                        "calculated": true
+                      }
+                    }
+                  },
+                  "relativeUriPathSegments": [
+                    "car"
                   ]
                 }
               ],
-              "displayName": "/{paymentProductId}",
+              "displayName": "/{testDriveId}",
               "__METADATA__": {
                 "primitiveValuesMeta": {
                   "displayName": {
@@ -575,18 +691,24 @@
                 }
               },
               "relativeUriPathSegments": [
-                "{paymentProductId}"
+                "{testDriveId}"
               ]
             }
           ],
-          "displayName": "Products",
-          "description": "Get information about payment products",
+          "displayName": "/testdrives",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
           "relativeUriPathSegments": [
-            "products"
+            "testdrives"
           ]
         },
         {
-          "relativeUri": "/productgroups",
+          "relativeUri": "/loans",
           "methods": [
             {
               "responses": {
@@ -595,134 +717,15 @@
                   "body": {
                     "application/json": {
                       "name": "application/json",
-                      "schema": "PaymentProductGroups",
-                      "example": "{\n  \"paymentProductGroups\": [\n    {\n      \"displayHints\": {\n        \"displayOrder\": 20,\n        \"label\": \"Cards\",\n        \"logo\": \"/templates/master/global/css/img/ppimages/group-card.png\"\n      },\n      \"id\": \"cards\"\n    }\n  ]\n}\n",
-                      "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductGroups\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"paymentProductGroups\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/PaymentProductGroup\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    }\n  }\n}"
+                      "example": "[\n  {\n    \"id\": 1,\n    \"customerName\": \"Hans de Vries\",\n    \"licensePlate\": \"11-22-AA\",\n    \"status\": \"Akkoord\",\n    \"amountInCents\": 450000,\n    \"finalized\": false\n  }\n]\n"
                     }
                   }
                 }
               },
               "protocols": [
-                "HTTPS"
+                "HTTP"
               ],
-              "queryParameters": {
-                "countryCode": {
-                  "name": "countryCode",
-                  "displayName": "countryCode",
-                  "type": "string",
-                  "required": true,
-                  "example": "NL",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
-                    }
-                  }
-                },
-                "currencyCode": {
-                  "name": "currencyCode",
-                  "displayName": "currencyCode",
-                  "type": "string",
-                  "required": true,
-                  "example": "EUR",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
-                    }
-                  }
-                },
-                "locale": {
-                  "name": "locale",
-                  "displayName": "locale",
-                  "type": "string",
-                  "required": false,
-                  "example": "en_US",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
-                    }
-                  }
-                },
-                "amount": {
-                  "name": "amount",
-                  "displayName": "amount",
-                  "type": "integer",
-                  "required": false,
-                  "example": "1000",
-                  "repeat": false,
-                  "maximum": 9223372036854776000,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
-                    }
-                  }
-                },
-                "isRecurring": {
-                  "name": "isRecurring",
-                  "displayName": "isRecurring",
-                  "type": "boolean",
-                  "required": false,
-                  "example": "true",
-                  "repeat": false,
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      },
-                      "repeat": {
-                        "insertedAsDefault": true
-                      }
-                    }
-                  }
-                },
-                "hide": {
-                  "name": "hide",
-                  "displayName": "hide",
-                  "type": "string",
-                  "required": false,
-                  "example": "accountsOnFile",
-                  "repeat": true,
-                  "description": "hides accountsOnFile and/or fields from the response",
-                  "enum": [
-                    "accountsOnFile",
-                    "fields"
-                  ],
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "displayName": {
-                        "calculated": true
-                      }
-                    }
-                  }
-                }
-              },
-              "description": "Get payment product groups",
               "method": "get",
-              "is": [
-                "canReturn400"
-              ],
               "__METADATA__": {
                 "primitiveValuesMeta": {
                   "protocols": {
@@ -734,17 +737,126 @@
           ],
           "resources": [
             {
-              "relativeUri": "/{paymentProductGroupId}",
-              "uriParameters": {
-                "paymentProductGroupId": {
-                  "name": "paymentProductGroupId",
-                  "displayName": "paymentProductGroupId",
-                  "type": "string",
-                  "required": true,
-                  "example": "cards",
-                  "repeat": false,
+              "relativeUri": "/calculate",
+              "methods": [
+                {
+                  "responses": {
+                    "200": {
+                      "code": "200",
+                      "body": {
+                        "application/json": {
+                          "name": "application/json",
+                          "example": "[\n  {\n    \"amountInCents\": \"150000\",\n    \"duration\": \"12\",\n    \"totalLoanCost\": 155491,\n    \"monthlyPayment\": 12958,\n    \"annualPercentRate\": 6900,\n    \"yearlyCostPercentage\": 6900\n  }\n]\n"
+                        }
+                      }
+                    }
+                  },
+                  "protocols": [
+                    "HTTP"
+                  ],
+                  "queryParameters": {
+                    "amount": {
+                      "name": "amount",
+                      "displayName": "amount",
+                      "type": "integer",
+                      "required": false,
+                      "example": "150000",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "method": "get",
                   "__METADATA__": {
                     "primitiveValuesMeta": {
+                      "protocols": {
+                        "calculated": true
+                      }
+                    }
+                  }
+                }
+              ],
+              "displayName": "/calculate",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "displayName": {
+                    "calculated": true
+                  }
+                }
+              },
+              "relativeUriPathSegments": [
+                "calculate"
+              ]
+            },
+            {
+              "relativeUri": "/calculatorConfig",
+              "methods": [
+                {
+                  "responses": {
+                    "200": {
+                      "code": "200",
+                      "body": {
+                        "application/json": {
+                          "name": "application/json",
+                          "example": "{\n  \"minAmountInCents\": 100000,\n  \"maxAmountInCents\": 2000000,\n  \"granularityInCents\": 100,\n  \"initialQuote\": [\n    {\n      \"amountInCents\": \"150000\",\n      \"duration\": \"12\",\n      \"totalLoanCost\": 155491,\n      \"monthlyPayment\": 12958,\n      \"annualPercentRate\": 6900,\n      \"yearlyCostPercentage\": 6900\n    }\n  ]\n}\n"
+                        }
+                      }
+                    }
+                  },
+                  "protocols": [
+                    "HTTP"
+                  ],
+                  "method": "get",
+                  "__METADATA__": {
+                    "primitiveValuesMeta": {
+                      "protocols": {
+                        "calculated": true
+                      }
+                    }
+                  }
+                }
+              ],
+              "displayName": "/calculatorConfig",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "displayName": {
+                    "calculated": true
+                  }
+                }
+              },
+              "relativeUriPathSegments": [
+                "calculatorConfig"
+              ]
+            },
+            {
+              "relativeUri": "/{loanId}",
+              "uriParameters": {
+                "loanId": {
+                  "name": "loanId",
+                  "displayName": "loanId",
+                  "type": "string",
+                  "required": true,
+                  "repeat": false,
+                  "__METADATA__": {
+                    "calculated": true,
+                    "primitiveValuesMeta": {
+                      "displayName": {
+                        "calculated": true
+                      },
+                      "type": {
+                        "insertedAsDefault": true
+                      },
                       "required": {
                         "insertedAsDefault": true
                       },
@@ -763,155 +875,90 @@
                       "body": {
                         "application/json": {
                           "name": "application/json",
-                          "schema": "PaymentProductGroupResponse",
-                          "example": "{\n  \"displayHints\": {\n    \"displayOrder\": 20,\n    \"label\": \"Cards\",\n    \"logo\": \"/templates/master/global/css/img/ppimages/group-card.png\"\n  },\n  \"fields\": [\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": true,\n        \"validators\": {\n          \"length\": {\n            \"maxLength\": 19,\n            \"minLength\": 12\n          },\n          \"luhn\": {\n            \n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 10,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"Card number:\",\n        \"mask\": \"{{9999}} {{9999}} {{9999}} {{9999}} {{999}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"**** **** **** ****\",\n        \"preferredInputType\": \"IntegerKeyboard\"\n      },\n      \"id\": \"cardNumber\",\n      \"type\": \"numericstring\"\n    },\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": true,\n        \"validators\": {\n          \"expirationDate\": {\n            \n          },\n          \"length\": {\n            \"maxLength\": 4,\n            \"minLength\": 4\n          },\n          \"regularExpression\": {\n            \"regularExpression\": \"(?:0[1-9]|1[0-2])[0-9]{2}\"\n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 20,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"Expiry date:\",\n        \"mask\": \"{{99}}/{{99}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"MM/YY\",\n        \"preferredInputType\": \"IntegerKeyboard\"\n      },\n      \"id\": \"expiryDate\",\n      \"type\": \"expirydate\"\n    },\n    {\n      \"dataRestrictions\": {\n        \"isRequired\": false,\n        \"validators\": {\n          \"length\": {\n            \"maxLength\": 4,\n            \"minLength\": 3\n          },\n          \"regularExpression\": {\n            \"regularExpression\": \"^[0-9]{3}[0-9]?$\"\n          }\n        }\n      },\n      \"displayHints\": {\n        \"displayOrder\": 24,\n        \"formElement\": {\n          \"type\": \"text\"\n        },\n        \"label\": \"CVV:\",\n        \"mask\": \"{{9999}}\",\n        \"obfuscate\": false,\n        \"placeholderLabel\": \"123\",\n        \"preferredInputType\": \"IntegerKeyboard\",\n        \"tooltip\": {\n          \"image\": \"/templates/master/global/css/img/ppimages/ppf_cvv_v1.png\",\n          \"label\": \"The CVV is a 3 or 4 digit code embossed or imprinted on your card.\"\n        }\n      },\n      \"id\": \"cvv\",\n      \"type\": \"numericstring\"\n    }\n  ],\n  \"id\": \"cards\"\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PaymentProductGroupResponse\",\n  \"allOf\" : [ {\n    \"$ref\" : \"definitions.json#/definitions/PaymentProductGroup\"\n  } ]\n}"
-                        }
-                      }
-                    },
-                    "404": {
-                      "code": "404",
-                      "body": {
-                        "application/json": {
-                          "name": "application/json",
-                          "schema": "ErrorResponse",
-                          "example": "{\n  \"errorId\": \"657b10da-d2f9-4088-a948-bf190ef516b1-00000213\",\n  \"errors\": [\n    {\n      \"code\": \"1070\",\n      \"message\": \"INVALID_PAYMENT_PRODUCT_GROUP_ID\"\n    }\n  ]\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
+                          "example": "{\n  \"id\": 1,\n  \"customerName\": \"Hans de Vries\",\n  \"licensePlate\": \"11-22-AA\",\n  \"status\": \"Akkoord\",\n  \"amountInCents\": 450000,\n  \"finalized\": false\n}\n"
                         }
                       }
                     }
                   },
                   "protocols": [
-                    "HTTPS"
+                    "HTTP"
                   ],
-                  "queryParameters": {
-                    "countryCode": {
-                      "name": "countryCode",
-                      "displayName": "countryCode",
-                      "type": "string",
-                      "required": true,
-                      "example": "NL",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
+                  "method": "get",
+                  "__METADATA__": {
+                    "primitiveValuesMeta": {
+                      "protocols": {
+                        "calculated": true
+                      }
+                    }
+                  }
+                }
+              ],
+              "resources": [
+                {
+                  "relativeUri": "/finalizeWithOwnershipDocument",
+                  "methods": [
+                    {
+                      "responses": {
+                        "204": {
+                          "code": "204"
+                        }
+                      },
+                      "body": {
+                        "multipart/form-data": {
+                          "name": "multipart/form-data",
+                          "formParameters": {
+                            "ownershipDocument": {
+                              "name": "ownershipDocument",
+                              "displayName": "ownershipDocument",
+                              "type": "file",
+                              "required": false,
+                              "repeat": false,
+                              "description": "image upload",
+                              "__METADATA__": {
+                                "primitiveValuesMeta": {
+                                  "displayName": {
+                                    "calculated": true
+                                  },
+                                  "required": {
+                                    "insertedAsDefault": true
+                                  },
+                                  "repeat": {
+                                    "insertedAsDefault": true
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
-                      }
-                    },
-                    "currencyCode": {
-                      "name": "currencyCode",
-                      "displayName": "currencyCode",
-                      "type": "string",
-                      "required": true,
-                      "example": "EUR",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "locale": {
-                      "name": "locale",
-                      "displayName": "locale",
-                      "type": "string",
-                      "required": false,
-                      "example": "en_US",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "amount": {
-                      "name": "amount",
-                      "displayName": "amount",
-                      "type": "integer",
-                      "required": false,
-                      "example": "1000",
-                      "repeat": false,
-                      "maximum": 9223372036854776000,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "isRecurring": {
-                      "name": "isRecurring",
-                      "displayName": "isRecurring",
-                      "type": "boolean",
-                      "required": false,
-                      "example": "true",
-                      "repeat": false,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "displayName": {
-                            "calculated": true
-                          },
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "hide": {
-                      "name": "hide",
-                      "displayName": "hide",
-                      "type": "string",
-                      "required": false,
-                      "example": "accountsOnFile",
-                      "repeat": true,
-                      "description": "hides accountsOnFile and/or fields from the response",
-                      "enum": [
-                        "accountsOnFile",
-                        "fields"
+                      },
+                      "protocols": [
+                        "HTTP"
                       ],
+                      "description": "timeSlotDate en timeSlotLabel zijn slechts verplicht als contactMoment == LATER.\n",
+                      "method": "post",
                       "__METADATA__": {
                         "primitiveValuesMeta": {
-                          "displayName": {
+                          "protocols": {
                             "calculated": true
                           }
                         }
                       }
                     }
-                  },
-                  "description": "Get payment product group",
-                  "method": "get",
-                  "is": [
-                    "canReturn400"
                   ],
+                  "displayName": "/finalizeWithOwnershipDocument",
                   "__METADATA__": {
                     "primitiveValuesMeta": {
-                      "protocols": {
+                      "displayName": {
                         "calculated": true
                       }
                     }
-                  }
+                  },
+                  "relativeUriPathSegments": [
+                    "finalizeWithOwnershipDocument"
+                  ]
                 }
               ],
-              "displayName": "/{paymentProductGroupId}",
+              "displayName": "/{loanId}",
               "__METADATA__": {
                 "primitiveValuesMeta": {
                   "displayName": {
@@ -920,21 +967,244 @@
                 }
               },
               "relativeUriPathSegments": [
-                "{paymentProductGroupId}"
+                "{loanId}"
               ]
             }
           ],
-          "displayName": "Product Groups",
-          "description": "Get information about payment product groups",
+          "displayName": "/loans",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
           "relativeUriPathSegments": [
-            "productgroups"
+            "loans"
           ]
         },
         {
-          "relativeUri": "/services",
+          "relativeUri": "/contact",
+          "methods": [
+            {
+              "responses": {
+                "204": {
+                  "code": "204"
+                }
+              },
+              "body": {
+                "multipart/form-data": {
+                  "name": "multipart/form-data",
+                  "formParameters": {
+                    "customerName": {
+                      "name": "customerName",
+                      "displayName": "customerName",
+                      "type": "string",
+                      "required": false,
+                      "example": "Hans de Vries",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "customerPhone": {
+                      "name": "customerPhone",
+                      "displayName": "customerPhone",
+                      "type": "string",
+                      "required": false,
+                      "example": "06-12345678",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "customerEmail": {
+                      "name": "customerEmail",
+                      "displayName": "customerEmail",
+                      "type": "string",
+                      "required": false,
+                      "example": "hans@devries.nl",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "customerDriversLicense": {
+                      "name": "customerDriversLicense",
+                      "displayName": "customerDriversLicense",
+                      "type": "file",
+                      "required": false,
+                      "repeat": false,
+                      "description": "image upload",
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "testDriveId": {
+                      "name": "testDriveId",
+                      "displayName": "testDriveId",
+                      "type": "string",
+                      "required": false,
+                      "example": "124",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "contactMoment": {
+                      "name": "contactMoment",
+                      "displayName": "contactMoment",
+                      "type": "string",
+                      "required": false,
+                      "example": "NOW / LATER",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "timeSlotDate": {
+                      "name": "timeSlotDate",
+                      "displayName": "timeSlotDate",
+                      "type": "string",
+                      "required": false,
+                      "example": "2015-11-24",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    },
+                    "timeSlotLabel": {
+                      "name": "timeSlotLabel",
+                      "displayName": "timeSlotLabel",
+                      "type": "string",
+                      "required": false,
+                      "example": "middag",
+                      "repeat": false,
+                      "__METADATA__": {
+                        "primitiveValuesMeta": {
+                          "displayName": {
+                            "calculated": true
+                          },
+                          "type": {
+                            "insertedAsDefault": true
+                          },
+                          "required": {
+                            "insertedAsDefault": true
+                          },
+                          "repeat": {
+                            "insertedAsDefault": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "timeSlotDate en timeSlotLabel zijn slechts verplicht als contactMoment == LATER.\n",
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
           "resources": [
             {
-              "relativeUri": "/convert/amount",
+              "relativeUri": "/schedule",
               "methods": [
                 {
                   "responses": {
@@ -943,72 +1213,16 @@
                       "body": {
                         "application/json": {
                           "name": "application/json",
-                          "schema": "ConvertAmount",
-                          "example": "{\n  \"convertedAmount\": 138\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ConvertAmount\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"convertedAmount\" : {\n      \"type\" : \"integer\",\n      \"maximum\" : 9223372036854775807\n    }\n  }\n}"
+                          "example": "{\n  \"canContactNow\" : true,\n  \"days\" : [ {\n    \"date\" : \"2016-01-22\",\n    \"slots\" : [ \"middag\", \"avond\" ]\n  }, {\n    \"date\" : \"2016-01-25\",\n    \"slots\" : [ \"ochtend\", \"middag\", \"avond\" ]\n  }, {\n    \"date\" : \"2016-01-26\",\n    \"slots\" : [ \"ochtend\", \"middag\", \"avond\" ]\n  }, {\n    \"date\" : \"2016-01-27\",\n    \"slots\" : [ \"ochtend\", \"middag\", \"avond\" ]\n  }, {\n    \"date\" : \"2016-01-28\",\n    \"slots\" : [ \"ochtend\", \"middag\", \"avond\" ]\n  } ]\n}\n"
                         }
                       }
                     }
                   },
                   "protocols": [
-                    "HTTPS"
+                    "HTTP"
                   ],
-                  "queryParameters": {
-                    "source": {
-                      "name": "source",
-                      "displayName": "Source",
-                      "type": "string",
-                      "required": true,
-                      "example": "EUR",
-                      "repeat": false,
-                      "description": "The source currency",
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "target": {
-                      "name": "target",
-                      "displayName": "Target",
-                      "type": "string",
-                      "required": true,
-                      "example": "USD",
-                      "repeat": false,
-                      "description": "The currency to convert to",
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    },
-                    "amount": {
-                      "name": "amount",
-                      "displayName": "Amount",
-                      "type": "integer",
-                      "required": true,
-                      "example": "100",
-                      "repeat": false,
-                      "description": "The amount of source currency",
-                      "maximum": 9223372036854776000,
-                      "__METADATA__": {
-                        "primitiveValuesMeta": {
-                          "repeat": {
-                            "insertedAsDefault": true
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "description": "Convert amount",
+                  "description": "Contact schedule for the next 5 working days\n",
                   "method": "get",
-                  "is": [
-                    "canReturn400"
-                  ],
                   "__METADATA__": {
                     "primitiveValuesMeta": {
                       "protocols": {
@@ -1018,7 +1232,7 @@
                   }
                 }
               ],
-              "displayName": "/convert/amount",
+              "displayName": "/schedule",
               "__METADATA__": {
                 "primitiveValuesMeta": {
                   "displayName": {
@@ -1027,137 +1241,65 @@
                 }
               },
               "relativeUriPathSegments": [
-                "convert",
-                "amount"
-              ]
-            },
-            {
-              "relativeUri": "/getIINdetails",
-              "methods": [
-                {
-                  "responses": {
-                    "200": {
-                      "code": "200",
-                      "body": {
-                        "application/json": {
-                          "name": "application/json",
-                          "schema": "GetIINDetailsResponse",
-                          "example": "{\n  \"countryCode\": \"RU\",\n  \"paymentProductId\": 3\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class GetIINDetailsResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"coBrands\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/IINDetail\"\n      },\n      \"minItems\" : 0,\n      \"uniqueItems\" : false\n    },\n    \"countryCode\" : {\n      \"type\" : \"string\"\n    },\n    \"isAllowedInContext\" : {\n      \"type\" : \"boolean\"\n    },\n    \"paymentProductId\" : {\n      \"type\" : \"integer\",\n      \"maximum\" : 2147483647\n    }\n  }\n}"
-                        }
-                      }
-                    },
-                    "404": {
-                      "code": "404",
-                      "body": {
-                        "application/json": {
-                          "name": "application/json",
-                          "schema": "ErrorResponse",
-                          "example": "{\n  \"errorId\": \"657b10da-d2f9-4088-a948-bf190ef516b1-00000312\",\n  \"errors\": [\n    {\n      \"code\": \"210380\",\n      \"propertyName\": \"bin\",\n      \"message\": \"NO BIN RANGE FOUND\"\n    }\n  ]\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class ErrorResponse\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"errorId\" : {\n      \"type\" : \"string\"\n    },\n    \"errors\" : {\n      \"type\" : \"array\",\n      \"items\" : {\n        \"$ref\" : \"definitions.json#/definitions/APIError\"\n      },\n      \"minItems\" : 1,\n      \"uniqueItems\" : false\n    }\n  },\n  \"required\" : [ \"errorId\", \"errors\" ]\n}"
-                        }
-                      }
-                    }
-                  },
-                  "body": {
-                    "application/json": {
-                      "name": "application/json",
-                      "schema": "GetIINDetailsRequest",
-                      "example": "{\n  \"bin\": \"54694894848\"\n}\n",
-                      "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class GetIINDetailsRequest\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"bin\" : {\n      \"type\" : \"string\"\n    },\n    \"paymentContext\" : {\n      \"$ref\" : \"definitions.json#/definitions/PaymentContext\"\n    }\n  },\n  \"required\" : [ \"bin\" ]\n}"
-                    }
-                  },
-                  "protocols": [
-                    "HTTPS"
-                  ],
-                  "description": "Get IIN details",
-                  "method": "post",
-                  "is": [
-                    "canReturn400"
-                  ],
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "protocols": {
-                        "calculated": true
-                      }
-                    }
-                  }
-                }
-              ],
-              "displayName": "/getIINdetails",
-              "__METADATA__": {
-                "primitiveValuesMeta": {
-                  "displayName": {
-                    "calculated": true
-                  }
-                }
-              },
-              "relativeUriPathSegments": [
-                "getIINdetails"
+                "schedule"
               ]
             }
           ],
-          "displayName": "Services",
-          "description": "Several services to help you",
+          "displayName": "/contact",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
           "relativeUriPathSegments": [
-            "services"
+            "contact"
           ]
         },
         {
-          "relativeUri": "/crypto",
-          "resources": [
+          "relativeUri": "/info",
+          "methods": [
             {
-              "relativeUri": "/publickey",
-              "methods": [
-                {
-                  "responses": {
-                    "200": {
-                      "code": "200",
-                      "body": {
-                        "application/json": {
-                          "name": "application/json",
-                          "schema": "PublicKey",
-                          "example": "{\n  \"keyId\": \"86b64e4e-f43e-4a27-9863-9bbd5b499f82\",\n  \"publicKey\": \"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkiJlGL1QjUnGDLpMNBtZPYVtOU121jfFcV4WrZayfw9Ib/1AtPBHP/0ZPocdA23zDh6aB+QiOQEkHZlfnelBNnEzEu4ibda3nDdjSrKveSiQPyB5X+u/IS3CR48B/g4QJ+mcMV9hoFt6Hx3R99A0HWMs4um8elQsgB11MsLmGb1SuLo0S1pgL3EcckXfBDNMUBMQ9EtLC9zQW6Y0kx6GFXHgyjNb4yixXfjo194jfhei80sVQ49Y/SHBt/igATGN1l18IBDtO0eWmWeBckwbNkpkPLAvJfsfa3JpaxbXwg3rTvVXLrIRhvMYqTsQmrBIJDl7F6igPD98Y1FydbKe5QIDAQAB\"\n}\n",
-                          "schemaContent": "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"class PublicKey\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"keyId\" : {\n      \"type\" : \"string\"\n    },\n    \"publicKey\" : {\n      \"type\" : \"string\"\n    }\n  },\n  \"required\" : [ \"keyId\", \"publicKey\" ]\n}"
-                        }
-                      }
-                    }
-                  },
-                  "protocols": [
-                    "HTTPS"
-                  ],
-                  "description": "Get public key",
-                  "method": "get",
-                  "__METADATA__": {
-                    "primitiveValuesMeta": {
-                      "protocols": {
-                        "calculated": true
-                      }
-                    }
-                  }
+              "responses": {
+                "204": {
+                  "code": "204"
                 }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"customerEmail\": \"hans@devries.nl\",\n  \"customerName\": \"Hans de Vries\",\n  \"amount\": 150000,\n  \"terms\": 12\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
               ],
-              "displayName": "/publickey",
+              "description": "required: customerEmail and customerName\noptional: amount and duration (both should be either null or non-null)\n",
+              "method": "post",
               "__METADATA__": {
                 "primitiveValuesMeta": {
-                  "displayName": {
+                  "protocols": {
                     "calculated": true
                   }
                 }
-              },
-              "relativeUriPathSegments": [
-                "publickey"
-              ]
+              }
             }
           ],
-          "displayName": "Crypto",
-          "description": "Get the public key",
+          "displayName": "/info",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
           "relativeUriPathSegments": [
-            "crypto"
+            "info"
           ]
         }
       ],
-      "displayName": "/{customerId}",
+      "displayName": "/dealer",
       "__METADATA__": {
         "primitiveValuesMeta": {
           "displayName": {
@@ -1166,14 +1308,358 @@
         }
       },
       "relativeUriPathSegments": [
-        "{customerId}"
+        "dealer"
+      ]
+    },
+    {
+      "relativeUri": "/admin",
+      "resources": [
+        {
+          "relativeUri": "/login",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"status\": \"SUCCESS\",\n  \"sessionId\": \"xxxxxxxxx\"\n}\n"
+                    },
+                    "application/json+failure-example": {
+                      "name": "application/json+failure-example",
+                      "example": "{\n  \"status\": \"FAILED\"\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"username\": \"isaac\",\n  \"password\": \"p@ssw0rd\"\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Login for an admin\n",
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/login",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "login"
+          ]
+        },
+        {
+          "relativeUri": "/logout",
+          "methods": [
+            {
+              "responses": {
+                "204": {
+                  "code": "204"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Logout for an admin.\n",
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/logout",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "logout"
+          ]
+        },
+        {
+          "relativeUri": "/dealers",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "[\n  {\n    \"id\": 13,\n    \"name\": \"C. Ardealer\",\n    \"address\": \"Straat 1\\n9999 AA Plaats\",\n    \"phone\": \"06-12345679\",\n    \"email\": \"c@ardealer.net\",\n    \"externalReference\": \"000020\",\n    \"active\": true\n  }\n]\n"
+                    }
+                  }
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Get a list of dealers\nSessie authenticatie\n",
+              "method": "get",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            },
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{ \"id\": 13,\n  \"name\": \"C. Ardealer\",\n  \"address\": \"Straat 1\\n9999 AA Plaats\",\n  \"phone\": \"06-12345679\",\n  \"email\": \"c@ardealer.net\",\n  \"externalReference\": \"000020\",\n  \"active\": true\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"id\": null,\n  \"name\": \"C. Ardealer\",\n  \"address\": \"Straat 1\\n9999 AA Plaats\",\n  \"phone\": \"06-12345679\",\n  \"email\": \"c@ardealer.net\",\n  \"password\": \"testpassword\",\n  \"externalReference\": \"000020\",\n  \"active\": true\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Als id niet null is, wordt een bestaand record geupdated, anders wordt een nieuw record aangemaakt.\nAls password niet null is, dan wordt het password geupdated, anders blijft het hetzelfde.\n\nMaximum lengtes van de strings:\n- name: 100\n- address: 255\n- email: 255\n- phone: 50\n- externalReference: 50\n",
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/dealers",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "dealers"
+          ]
+        },
+        {
+          "relativeUri": "/configuration/contactschedule",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "text/plain": {
+                      "name": "text/plain",
+                      "example": "{\n  \"maxDays\": 5,\n  \"schedule\":\n  { \"monday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"tuesday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"wednesday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"thursday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"friday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"saturday\": [ ],\n    \"sunday\": [ ]\n  },\n  \"exceptions\":\n  { \"2015-12-24\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"kerstavond\", \"from\": \"17:00\", \"to\": \"19:00\" } ],\n    \"2015-12-25\": [ ],\n    \"2015-12-31\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" } ]\n  }\n}\n"
+                    }
+                  }
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "get",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            },
+            {
+              "responses": {
+                "204": {
+                  "code": "204"
+                }
+              },
+              "body": {
+                "text/plain": {
+                  "name": "text/plain",
+                  "example": "{\n  \"maxDays\": 5,\n  \"schedule\":\n  { \"monday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"tuesday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"wednesday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"thursday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"friday\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"avond\", \"from\": \"17:00\", \"to\": \"20:00\" } ],\n    \"saturday\": [ ],\n    \"sunday\": [ ]\n  },\n  \"exceptions\":\n  { \"2015-12-24\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" },\n      { \"label\": \"middag\", \"from\": \"12:30\", \"to\": \"16:00\" },\n      { \"label\": \"kerstavond\", \"from\": \"17:00\", \"to\": \"19:00\" } ],\n    \"2015-12-25\": [ ],\n    \"2015-12-31\":\n    [ { \"label\": \"ochtend\", \"from\": \"09:00\", \"to\": \"12:00\" } ]\n  }\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "method": "put",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/configuration/contactschedule",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "configuration",
+            "contactschedule"
+          ]
+        }
+      ],
+      "displayName": "/admin",
+      "__METADATA__": {
+        "primitiveValuesMeta": {
+          "displayName": {
+            "calculated": true
+          }
+        }
+      },
+      "relativeUriPathSegments": [
+        "admin"
+      ]
+    },
+    {
+      "relativeUri": "/system",
+      "resources": [
+        {
+          "relativeUri": "/checkStatus",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"middlewareStatus\" : \"OK\",\n  \"dialogueStatus\" : \"OK\",\n  \"databaseStatus\" : \"OK\"\n}\n"
+                    }
+                  }
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Query the current system status\n",
+              "method": "get",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/checkStatus",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "checkStatus"
+          ]
+        },
+        {
+          "relativeUri": "/loans",
+          "methods": [
+            {
+              "responses": {
+                "200": {
+                  "code": "200",
+                  "body": {
+                    "application/json": {
+                      "name": "application/json",
+                      "example": "{\n  \"dealerReference\": \"apply\",\n  \"dealerLoanReference\": \"12345\",\n  \"testDriveId\": 124,\n  \"licensePlate\": \"AA-BB-11\",\n  \"name\": \"Hans de Vries\",\n  \"amount\": 150000,\n  \"status\": \"Goedgekeurd\",\n  \"finalized\": false\n}\n"
+                    }
+                  }
+                }
+              },
+              "body": {
+                "application/json": {
+                  "name": "application/json",
+                  "example": "{\n  \"dealerReference\": \"apply\",\n  \"dealerLoanReference\": \"12345\",\n  \"testDriveId\": 124,\n  \"name\": \"Hans de Vries\",\n  \"amount\": 150000,\n  \"status\": \"Goedgekeurd\"\n}\n"
+                }
+              },
+              "protocols": [
+                "HTTP"
+              ],
+              "description": "Used by Pangaea logic to update the dealerapp with the latest loan statusses.\n\nHet veld testDriveId mag null zijn als er geen koppeling gemaakt is. Als een niet-bestaand testDriveId wordt meegegeven, of een testDriveId dat niet gekoppeld is aan de gespecificeerde dealer, dan verschijnt er een warning in de log en wordt de lening niet gekoppeld (maar wel getoond aan de dealer).\n",
+              "method": "post",
+              "__METADATA__": {
+                "primitiveValuesMeta": {
+                  "protocols": {
+                    "calculated": true
+                  }
+                }
+              }
+            }
+          ],
+          "displayName": "/loans",
+          "__METADATA__": {
+            "primitiveValuesMeta": {
+              "displayName": {
+                "calculated": true
+              }
+            }
+          },
+          "relativeUriPathSegments": [
+            "loans"
+          ]
+        }
+      ],
+      "displayName": "/system",
+      "__METADATA__": {
+        "primitiveValuesMeta": {
+          "displayName": {
+            "calculated": true
+          }
+        }
+      },
+      "relativeUriPathSegments": [
+        "system"
       ]
     }
   ],
-  "documentation": [
-    {
-      "title": "Welcome",
-      "content": "Welcome to the documentation for the GlobalCollect client-to-Server API\nOn this page you can find information about all possible calls and their specification\n"
+  "__METADATA__": {
+    "primitiveValuesMeta": {
+      "protocols": {
+        "calculated": true
+      }
     }
-  ]
+  }
 }
