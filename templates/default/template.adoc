@@ -2,9 +2,9 @@
 = {{api.title}}
 :doctype: book
 :icons: font
-:icon-set: fa
+:icon-set: fa{% if style %}
 :pdf-stylesdir: themes
-:pdf-fontsdir: themes/fonts{% if style %}
+:pdf-fontsdir: themes/fonts
 :pdf-style: {{style}}{% endif %}
 :source-highlighter: rouge{% if api.author %}
 {{api.author}}{% if api.author_email %} <{{api.author_email}}>{% endif %}{% endif %}{%if api.version %}

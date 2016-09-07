@@ -20,10 +20,19 @@ var apiJSON = api.toJSON();
 // Recursively add parent URI variables and convert methods to UPPERCASE
 apiJSON.resources.forEach(setParents);
 
+var res;
 // Render asciidoc
-var res = nunjucks.render('templates/' + options.template + '/template.adoc', {
-  api: apiJSON
-});
+if(options.style != undefined) {
+  res = nunjucks.render('templates/' + options.template + '/template.adoc', {
+    api: apiJSON,
+    style: options.style
+  });
+}
+else {
+  res = nunjucks.render('templates/' + options.template + '/template.adoc', {
+    api: apiJSON
+  });
+}
 
 // Save asciidoc
 writeAsciidoc(res);
