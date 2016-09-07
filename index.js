@@ -5,31 +5,27 @@ var nunjucks = require("nunjucks");
 
 // Handle command line arguments
 const commandLineArgs = require('command-line-args')
-console.log("Reading API specification");
 const optionDefinitions = [
   { name: 'input', alias: 'i', type: String, defaultValue: 'spec.raml' },
   { name: 'template', alias: 't', type: String, defaultValue: 'default' }
 ]
 const options = commandLineArgs(optionDefinitions)
 
-var specName = options.input;
-var template = options.template;
-
-var fName = path.resolve(__dirname, specName);
+// Read API
+var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
 
-
-console.log("Adding parent nodes");
+// Recursively add parent URI variables and convert methods to UPPERCASE
 apiJSON.resources.forEach(setParents);
 
-console.log("rendering asciidoc");
-var res = nunjucks.render('templates/' + template + '/template.adoc', {
+// Render asciidoc
+var res = nunjucks.render('templates/' + options.template + '/template.adoc', {
   api: apiJSON
 });
 
+// Save asciidoc
 writeAsciidoc(res);
-console.log("DONE");
 
 /**
 * Add parentPath variable
