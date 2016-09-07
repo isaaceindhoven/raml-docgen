@@ -8,7 +8,8 @@ const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
   { name: 'input', alias: 'i', type: String, defaultValue: 'spec.raml' },
   { name: 'template', alias: 't', type: String, defaultValue: 'default' },
-  { name: 'style', alias: 's', type: String, required: false }
+  { name: 'style', alias: 's', type: String, required: false },
+  { name: 'debug', alias: 'd', type: Boolean }
 ]
 const options = commandLineArgs(optionDefinitions)
 
@@ -19,6 +20,8 @@ var apiJSON = api.toJSON();
 
 // Recursively add parent URI variables and convert methods to UPPERCASE
 apiJSON.resources.forEach(setParents);
+
+if(options.debug) writeDebug(apiJSON);
 
 var res;
 // Render asciidoc
@@ -69,6 +72,14 @@ function setParents(child) {
 
 function writeAsciidoc(templateString) {
   fs.writeFile("api.adoc", templateString, function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  })
+}
+
+function writeDebug(apiJSON) {
+  fs.writeFile("api.json", JSON.stringify(apiJSON, " ", 2), function(err) {
     if(err) {
       return console.log(err);
     }

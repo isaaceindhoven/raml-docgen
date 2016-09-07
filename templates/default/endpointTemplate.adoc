@@ -1,5 +1,5 @@
 {% for method in endpoint.methods %}
-=== {{method.method}} {{endpoint.parentPath}}{{ endpoint.relativeUri }}
+=== {{method.method}} {{endpoint.parentPath}}{{endpoint.relativeUri}}
 {% if method.description %}
 ==== Description
 {{method.description}}
