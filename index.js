@@ -7,15 +7,15 @@ var nunjucks = require("nunjucks");
 const commandLineArgs = require('command-line-args')
 console.log("Reading API specification");
 const optionDefinitions = [
-  { name: 'input', alias: 'i', type: String, defaultOption: 'spec.raml' },
-  { name: 'template', alias: 't', type: String, defaultOption: 'default' }
+  { name: 'input', alias: 'i', type: String, defaultValue: 'spec.raml' },
+  { name: 'template', alias: 't', type: String, defaultValue: 'default' }
 ]
 const options = commandLineArgs(optionDefinitions)
 
 var specName = options.input;
 var template = options.template;
 
-var fName = path.resolve(__dirname, "spec/" + specName);
+var fName = path.resolve(__dirname, specName);
 var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
 
@@ -36,27 +36,27 @@ console.log("DONE");
 * Used for rendering complete paths
 * Also converts methods to UPPERCASE
 */
-function setParents(item) {
+function setParents(child) {
   // Only print path and methods if this endpoint actually has methods - otherwise skip
-  if(item.methods != undefined && item.relativeUri != undefined) {
-    item.methods.forEach(function(m){
+  if(child.methods != undefined && child.relativeUri != undefined) {
+    child.methods.forEach(function(m){
       m.method = m.method.toUpperCase();
     })
   }
 
   // Item has children, output them too.
-  if(item.resources != undefined) {
-    var parent = item;
-    item.resources.forEach(function(item) {
-      if(parent.parentPath != undefined) item.parentPath = parent.parentPath + "" + parent.relativeUri;
-      else item.parentPath = parent.relativeUri;
+  if(child.resources != undefined) {
+    var parent = child;
+    child.resources.forEach(function(child) {
+      if(parent.parentPath != undefined) child.parentPath = parent.parentPath + "" + parent.relativeUri;
+      else child.parentPath = parent.relativeUri;
       if(parent.uriParameters != undefined){
-        if(item.uriParameters == undefined) item.uriParameters = {};
+        if(child.uriParameters == undefined) child.uriParameters = {};
         for (var key in parent.uriParameters) {
-          item.uriParameters[key] = parent.uriParameters[key];
+          child.uriParameters[key] = parent.uriParameters[key];
         }
       }
-      setParents(item);
+      setParents(child);
     });
   }
 }

@@ -11,7 +11,7 @@
 {% endif %}                                         {# if Method Body Example #}
 {% if data.formParameters %}                        {# if Method Form Parameters #}
 ==== Form Variables
-[options="header"]
+[options="header", frame="topbot"]
 |===
 | Name | Example | Type
 {% for name, data in data.formParameters %}         {# foreach Method Form Parameters #}

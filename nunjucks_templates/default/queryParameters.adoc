@@ -1,7 +1,7 @@
 {# Query paramters for a method #}
 ==== Query Parameters
 
-[Options="header"]
+[Options="header", frame="topbot"]]
 |===
 | Name | Example | Type
 {% for name, data in method.queryParameters %}           {# foreach Query Parameters #}

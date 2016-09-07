@@ -1,13 +1,13 @@
 {
-  "name": "ramlapi",
+  "name": "RAML2asciidoc",
   "version": "1.0.0",
   "description": "Convert RAML API specification to asciidoc",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Cas Eliens <cas.eliens@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "command-line-args": "^3.0.1",
     "nunjucks": "^2.4.2",

@@ -1,7 +1,7 @@
 {# URI parameters for an endpoint #}
 ==== URI Parameters
 
-[options="header"]
+[options="header", frame="topbot"]]
 |===
 | Name | Description | Type
 {% for name, data in endpoint.uriParameters %}              {# foreach URI Parameters #}
