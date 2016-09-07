@@ -7,7 +7,8 @@ var nunjucks = require("nunjucks");
 const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
   { name: 'input', alias: 'i', type: String, defaultValue: 'spec.raml' },
-  { name: 'template', alias: 't', type: String, defaultValue: 'default' }
+  { name: 'template', alias: 't', type: String, defaultValue: 'default' },
+  { name: 'style', alias: 's', type: String, required: false }
 ]
 const options = commandLineArgs(optionDefinitions)
 

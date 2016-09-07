@@ -2,6 +2,9 @@
 
 Convert your RAML (0.8 or 1.0) specification to asciidoc.
 
+== Converting to PDF
+In order to convert the generated asciidoc to PDF, you will need link:https://github.com/asciidoctor/asciidoctor-pdf[asciidoctor-pdf]. The generated asciidoc has a theme directory set to `themes/`, with `themes/fonts` as fonts directory.
+
 == Usage
 This utility can be executed from the command line.
 

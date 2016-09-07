@@ -4,8 +4,8 @@
 :icons: font
 :icon-set: fa
 :pdf-stylesdir: themes
-:pdf-fontsdir: themes/fonts
-:pdf-style: isaac
+:pdf-fontsdir: themes/fonts{% if style %}
+:pdf-style: {{style}}{% endif %}
 :source-highlighter: rouge{% if api.author %}
 {{api.author}}{% if api.author_email %} <{{api.author_email}}>{% endif %}{% endif %}{%if api.version %}
 {{api.version}}{% endif %}
