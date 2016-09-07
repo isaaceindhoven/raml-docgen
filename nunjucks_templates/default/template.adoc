@@ -1,3 +1,4 @@
+{% set templateName = 'default' %}
 = {{api.title}}
 :doctype: book
 :icons: font
@@ -12,12 +13,9 @@
 {{api.description}}
 
 == Overview
-
 Base URI: {{api.baseUri}}
-
-
 
 == Paths
 {% for endpoint in api.resources %}                 {# foreach Endpoints #}
-{% include "endpointTemplate.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/endpointTemplate.adoc' %}
 {% endfor %}                                        {# foreach Endpoints #}

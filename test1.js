@@ -3,17 +3,28 @@ var fs = require("fs");
 var path = require("path");
 var nunjucks = require("nunjucks");
 
+// Handle command line arguments
+const commandLineArgs = require('command-line-args')
 console.log("Reading API specification");
-var specName = process.argv[2];
+const optionDefinitions = [
+  { name: 'input', alias: 'i', type: String, defaultOption: 'spec.raml' },
+  { name: 'template', alias: 't', type: String, defaultOption: 'default' }
+]
+const options = commandLineArgs(optionDefinitions)
+
+var specName = options.input;
+var template = options.template;
+
 var fName = path.resolve(__dirname, "spec/" + specName);
 var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
+
 
 console.log("Adding parent nodes");
 apiJSON.resources.forEach(setParents);
 
 console.log("rendering asciidoc");
-var res = nunjucks.render('template.adoc', {
+var res = nunjucks.render('nunjucks_templates/' + template + '/template.adoc', {
   api: apiJSON
 });
 

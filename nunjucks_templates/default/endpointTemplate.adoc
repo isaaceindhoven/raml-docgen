@@ -12,19 +12,19 @@
 {% endif %}
 
 {% if endpoint.uriParameters %}
-{% include "uriParameters.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/uriParameters.adoc' %}
 {% endif %}
 
 {% if method.queryParameters %}
-{% include "queryParameters.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/queryParameters.adoc' %}
 {% endif %}
 
 {% if method.body %}
-{% include "methodBody.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/methodBody.adoc' %}
 {% endif %}
 
 {% if method.responses %}
-{% include "methodResponse.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/methodResponse.adoc' %}
 {% endif %}
 
 <<<
@@ -33,5 +33,5 @@
 
 {# Call this template recursively for children of the current endpoint #}
 {% for endpoint in endpoint.resources %}
-{% include "endpointTemplate.adoc" %}
+{% include 'nunjucks_templates/' + templateName + '/endpointTemplate.adoc' %}
 {% endfor %}

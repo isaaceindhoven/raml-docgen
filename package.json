@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "command-line-args": "^3.0.1",
     "nunjucks": "^2.4.2",
     "raml-1-parser": "^1.1.0"
   }
