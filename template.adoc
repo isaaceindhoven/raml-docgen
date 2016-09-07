@@ -1,22 +1,48 @@
-= {{title}}
-:toc:
-:doctype: book{% if author %}
-{{author}}{% if author_email %} <{{author_email}}>{% endif %}{% endif %}{%if version %}
-{{version}}{% endif %}
+= {{generic.title}}
+:doctype: book
+:source-highlighter: rouge{% if generic.author %}
+{{generic.author}}{% if generic.author_email %} <{{generic.author_email}}>{% endif %}{% endif %}{%if generic.version %}
+{{generic.version}}{% endif %}
 
-{{description}}
+{{generic.description}}
+
+== Overview
+
+Base URI: {{generic.baseUri}}
 
 == Paths
-
-{% for e in endpoints %}
-{% for m in e.methods %}
+{% for e in endpoints %}{% for m in e.methods %}
 === {{m.method}} {{e.parentPath}}{{ e.relativeUri }}{% if m.description %}
 ==== Description
-{{m.description}}{% endif %}{% if m.protocols %}
+{{m.description}}{% endif %}
+{% if m.protocols %}
 ==== Protocols{% for p in m.protocols %}
-{{p}}{% endfor %}{% endif %}
-{% for r in m.responses %} {# //TODO: Make this work #}
-Hello, world! +
+{{p}}{% endfor %}{% endif %}{% if m.body %}
+
+==== Request
+{% for type, data in m.body %}
+*Content-Type*: `{{type}}`{% if data.example %}
+----
+{{data.example | safe}}
+----{% endif %}
+{% endfor %}{% endif %}{% if m.responses %}
+
+==== Responses
+{% for code, data in m.responses %}
+===== {{code}}
+{% for type, body in data.body %}
+*Content-Type*: `{{type}}`
+
+.Example body
+----
+{{body.example | safe}}
+----
+
 {% endfor %}
+{% endfor %}
+{% endif %}
+
+<<<
+
 {% endfor %}
 {% endfor %}

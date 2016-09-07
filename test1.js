@@ -2,33 +2,37 @@ var raml = require("raml-1-parser");
 var fs = require("fs");
 var path = require("path");
 var nunjucks = require("nunjucks");
-var specPath = path.resolve(__dirname, "spec");
 
-//var fName = path.resolve(specPath, "c2s-api.raml");
-var fName = path.resolve(specPath, "qander1.raml");
+console.log("Reading API specification");
+var specName = process.argv[2];
+var fName = path.resolve(__dirname, "spec/" + specName);
 var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
-var jsonString = JSON.stringify(apiJSON, null, 2);
-//writeJson(jsonString);
-
 var endpointArray = [];
 
-apiJSON.resources.forEach(echoThing);
+console.log("Adding parent nodes");
+apiJSON.resources.forEach(setParents);
 
+console.log("rendering asciidoc");
 var res = nunjucks.render('template.adoc', {
-  title: apiJSON.title,
-  version: apiJSON.version,
-  author: apiJSON.author,
-  author_email: apiJSON.authoremail,
+  generic: apiJSON,
   endpoints: endpointArray
 });
 
-writeTemplate(res);
+writeAsciidoc(res);
+console.log("DONE");
 
-// Echo path for an endpoint
-function echoThing(item) {
+/**
+ * Add parentPath variable
+ * Used for rendering complete paths
+ * Also converts methods to UPPERCASE
+ */
+function setParents(item) {
   // Only print path and methods if this endpoint actually has methods - otherwise skip
   if(item.methods != undefined && item.relativeUri != undefined) {
+    item.methods.forEach(function(m){
+      m.method = m.method.toUpperCase();
+    })
     endpointArray.push(item);
   }
 
@@ -38,24 +42,15 @@ function echoThing(item) {
     item.resources.forEach(function(item) {
       if(parent.parentPath != undefined) item.parentPath = parent.parentPath + "" + parent.relativeUri;
       else item.parentPath = parent.relativeUri;
-      echoThing(item);
+      setParents(item);
     });
   }
 }
 
-function writeTemplate(templateString) {
+function writeAsciidoc(templateString) {
   fs.writeFile("api.adoc", templateString, function(err) {
     if(err) {
       return console.log(err);
     }
   })
-}
-
-// Write the interpreted RAML to file
-function writeJson(jsonString) {
-  fs.writeFile("api.json", jsonString, function(err) {
-    if(err) {
-      return console.log(err);
-    }
-  });
 }
