@@ -19,7 +19,7 @@ var api = raml.loadApiSync(fName);
 var apiJSON = api.toJSON();
 
 // Recursively add parent URI variables and convert methods to UPPERCASE
-apiJSON.resources.forEach(setParents);
+maintenance(apiJSON);
 
 if(options.debug) writeDebug(apiJSON);
 
@@ -45,27 +45,47 @@ writeAsciidoc(res);
 * Used for rendering complete paths
 * Also converts methods to UPPERCASE
 */
-function setParents(child) {
-  // Only print path and methods if this endpoint actually has methods - otherwise skip
-  if(child.methods != undefined && child.relativeUri != undefined) {
-    child.methods.forEach(function(m){
-      m.method = m.method.toUpperCase();
-    })
+function maintenance(api) {
+  // Gather types
+  types = {};
+  for(index in api.resourceTypes) {
+    for(name in api.resourceTypes[index]) {
+      types[name] = api.resourceTypes[index][name]
+    }
   }
 
-  // Item has children, output them too.
-  if(child.resources != undefined) {
-    var parent = child;
-    child.resources.forEach(function(child) {
-      if(parent.parentPath != undefined) child.parentPath = parent.parentPath + "" + parent.relativeUri;
-      else child.parentPath = parent.relativeUri;
-      if(parent.uriParameters != undefined){
+  api.resources.forEach(function(node) {
+    nodeMaintenance(node, types);
+  });
+}
+
+function nodeMaintenance(node, types) {
+  // Convert method to uppercase
+  if(node.methods != undefined && node.relativeUri != undefined) {
+    node.methods.forEach(function(m){
+      m.method = m.method.toUpperCase();
+    });
+  }
+
+  // Assign node types
+  if(node.type != undefined) {
+    for(value in types[node.type]) {
+      node[value] = types[node.type][value];
+    }
+  }
+
+  // Node has children, output them too.
+  if(node.resources != undefined) {
+    node.resources.forEach(function(child) {
+      if(node.parentPath != undefined) child.parentPath = node.parentPath + "" + node.relativeUri;
+      else child.parentPath = node.relativeUri;
+      if(node.uriParameters != undefined){
         if(child.uriParameters == undefined) child.uriParameters = {};
-        for (var key in parent.uriParameters) {
-          child.uriParameters[key] = parent.uriParameters[key];
+        for (var key in node.uriParameters) {
+          child.uriParameters[key] = node.uriParameters[key];
         }
       }
-      setParents(child);
+      nodeMaintenance(child, api);
     });
   }
 }
