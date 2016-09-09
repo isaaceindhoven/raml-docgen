@@ -17,15 +17,10 @@ const options = commandLineArgs(optionDefinitions);
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
 
-var apiJSON = {}
-apiJSON.title = api.title();
-apiJSON.baseUri = api.baseUri().value();
-apiJSON.version = api.version();
-apiJSON.resources = [];
 
 // Enumerate all the resources
 for (var resNum = 0; resNum < api.resources().length; ++resNum) {
-  processResource(api.resources()[resNum], apiJSON);
+  processResource(api.resources()[resNum]);
 }
 
 if(options.debug) writeDebug(api.toJSON());
@@ -34,8 +29,7 @@ if(options.debug) writeDebug(api.toJSON());
 /**
 * Process resource (here we just trace different paramters of URL)
 **/
-function processResource(res, apiJSON) {
-  apiJSON.resources.push(res);
+function processResource(res) {
   var relativeUri = res.relativeUri().value();
   var completeRelativeUri = res.completeRelativeUri();
 
@@ -50,14 +44,21 @@ function processResource(res, apiJSON) {
       if(options.debug) console.log("\tURI Parameter:", uriParam.name(), uriParam.type());
     }
 
+    for (var qi = 0; qi < method.queryParameters().length; qi++) {
+      var parameter = method.queryParameters()[qi];
+      if(options.debug) console.log("\t Query Parameter: ", parameter.name(), parameter.optional());
+    }
+
+
     for (var y = 0; y < res.securedBy().length; y++) {
       var securedBy = res.securedBy()[y];
       if(options.debug) console.log("\t Secured by: " + securedBy.name());
     }
 
     for (var ri = 0; ri < method.responses().length; ri++) {
+      //TODO: Inherit response types
       var response = method.responses()[ri];
-      
+
     }
 
   }
@@ -65,7 +66,7 @@ function processResource(res, apiJSON) {
   // Recursive call this function for all subresources
   for (var i = 0; i < res.resources().length; i++) {
     var subRes = res.resources()[i];
-    processResource(subRes, apiJSON);
+    processResource(subRes);
   }
 }
 
