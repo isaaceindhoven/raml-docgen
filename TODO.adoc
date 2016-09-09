@@ -1,8 +1,12 @@
 = TODO
 
 * Custom schemas
+* Documentation strings
+* Traits
+* resourceTypes
+* annotationTypes
+* Types
 * Security settings
 * default content-type
 * general info page
-* Support for resourceTypes (inheritance)
 * if displayName is set and different than relativeUri Display displayName in title , display path and method below that

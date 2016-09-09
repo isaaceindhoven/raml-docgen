@@ -1,5 +1,5 @@
 {% for method in endpoint.methods %}
-=== {{method.method}} {{endpoint.parentPath}}{{endpoint.relativeUri}}
+=== {{method.method}} {{endpoint | completeRelativeUri}}{{endpoint.relativeUri}}
 {% if method.description %}
 ==== Description
 {{method.description}}
@@ -12,19 +12,19 @@
 {% endif %}
 
 {% if endpoint.uriParameters %}
-{% include 'templates/' + templateName + '/uriParameters.adoc' %}
+{% include 'uriParameters.adoc' %}
 {% endif %}
 
 {% if method.queryParameters %}
-{% include 'templates/' + templateName + '/queryParameters.adoc' %}
+{% include 'queryParameters.adoc' %}
 {% endif %}
 
 {% if method.body %}
-{% include 'templates/' + templateName + '/methodBody.adoc' %}
+{% include 'methodBody.adoc' %}
 {% endif %}
 
 {% if method.responses %}
-{% include 'templates/' + templateName + '/methodResponse.adoc' %}
+{% include 'methodResponse.adoc' %}
 {% endif %}
 
 <<<
@@ -33,5 +33,5 @@
 
 {# Call this template recursively for children of the current endpoint #}
 {% for endpoint in endpoint.resources %}
-{% include 'templates/' + templateName + '/endpointTemplate.adoc' %}
+{% include 'endpointTemplate.adoc' %}
 {% endfor %}

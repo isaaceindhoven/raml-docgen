@@ -1,4 +1,3 @@
-{% set templateName = 'default' %}
 = {{api.title}}
 :doctype: book
 :icons: font
@@ -17,5 +16,5 @@ Base URI: {{api.baseUri}}
 
 == Paths
 {% for endpoint in api.resources %}                 {# foreach Endpoints #}
-{% include 'templates/' + templateName + '/endpointTemplate.adoc' %}
+{% include 'endpointTemplate.adoc' %}
 {% endfor %}                                        {# foreach Endpoints #}

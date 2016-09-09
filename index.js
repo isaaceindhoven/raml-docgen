@@ -13,6 +13,12 @@ const optionDefinitions = [
 ]
 const options = commandLineArgs(optionDefinitions)
 
+// Configure Nunjucks
+var env = nunjucks.configure('templates/' + options.template);
+env.addFilter('completeRelativeUri', function(node) {
+    return node.completeRelativeUri();
+});
+
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
@@ -26,13 +32,13 @@ if(options.debug) writeDebug(apiJSON);
 var res;
 // Render asciidoc
 if(options.style != undefined) {
-  res = nunjucks.render('templates/' + options.template + '/template.adoc', {
+  res = env.render('template.adoc', {
     api: apiJSON,
     style: options.style
   });
 }
 else {
-  res = nunjucks.render('templates/' + options.template + '/template.adoc', {
+  res = env.render('template.adoc', {
     api: apiJSON
   });
 }
@@ -67,6 +73,7 @@ function nodeMaintenance(node, types) {
     });
   }
 
+  //TODO: Make this work
   // Assign node types
   if(node.type != undefined) {
     for(value in types[node.type]) {
@@ -103,5 +110,5 @@ function writeDebug(apiJSON) {
     if(err) {
       return console.log(err);
     }
-  })
+  });
 }

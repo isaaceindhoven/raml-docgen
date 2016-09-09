@@ -1,7 +1,0 @@
-{
-  "$schema" : "http://json-schema.org/draft-04/schema#",
-  "title" : "class PaymentResponse",
-  "allOf" : [ {
-    "$ref" : "definitions.json#/definitions/Payment"
-  } ]
-}
