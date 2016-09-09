@@ -22,7 +22,7 @@ env.addFilter('completeRelativeUri', function(node) {
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
-var apiJSON = api.toJSON();
+var apiJSON = api.expand().toJSON();
 
 // Recursively add parent URI variables and convert methods to UPPERCASE
 maintenance(apiJSON);
