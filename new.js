@@ -9,7 +9,8 @@ const optionDefinitions = [
   { name: 'input', alias: 'i', type: String, defaultValue: 'spec.raml' },
   { name: 'template', alias: 't', type: String, defaultValue: 'default' },
   { name: 'style', alias: 's', type: String, required: false },
-  { name: 'debug', alias: 'd', type: Boolean }
+  { name: 'debug', alias: 'd', type: Boolean },
+  { name: 'json', alias: 'j', type: Boolean }
 ]
 const options = commandLineArgs(optionDefinitions);
 
@@ -23,7 +24,7 @@ for (var resNum = 0; resNum < api.resources().length; ++resNum) {
   processResource(api.resources()[resNum]);
 }
 
-if(options.debug) writeDebug(api.toJSON());
+if(options.json) writeDebug(api.toJSON());
 
 
 /**
@@ -46,7 +47,7 @@ function processResource(res) {
 
     for (var qi = 0; qi < method.queryParameters().length; qi++) {
       var parameter = method.queryParameters()[qi];
-      if(options.debug) console.log("\t Query Parameter: ", parameter.name(), parameter.optional());
+      if(options.debug) console.log("\t Query Parameter: ", parameter.name());
     }
 
 
