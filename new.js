@@ -1,4 +1,5 @@
 var raml = require("raml-1-parser");
+var tools = require("datatype-expansion");
 var fs = require("fs");
 var path = require("path");
 var nunjucks = require("nunjucks");
@@ -17,6 +18,18 @@ const options = commandLineArgs(optionDefinitions);
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
+var apiJSONTemp = api.toJSON();
+if(options.debug) {
+  console.log(JSON.stringify(apiJSONTemp, null, 2));
+}
+var expanded = tools.expandedForm(apiJSONTemp["types.User"], apiJSONTemp["types"], function(err, expanded) {
+  console.log("=== EXPANDED TYPES ===");
+  if(err) {
+    console.log(err);
+  } else {
+    console.log(JSON.stringify(expanded, null, 2));
+  }
+});
 
 
 // Enumerate all the resources
