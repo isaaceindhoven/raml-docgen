@@ -15,9 +15,6 @@ const options = commandLineArgs(optionDefinitions)
 
 // Configure Nunjucks
 var env = nunjucks.configure('templates/' + options.template);
-env.addFilter('completeRelativeUri', function(node) {
-    return node.completeRelativeUri();
-});
 
 // Read API
 var fName = path.resolve(__dirname, options.input);

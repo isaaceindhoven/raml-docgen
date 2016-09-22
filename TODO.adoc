@@ -10,3 +10,4 @@
 * default content-type
 * general info page
 * if displayName is set and different than relativeUri Display displayName in title , display path and method below that
+* Optional expansion of types, traits, etc.

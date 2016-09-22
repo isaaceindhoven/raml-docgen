@@ -18,9 +18,11 @@ const options = commandLineArgs(optionDefinitions);
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
+var expanded = api.expand();
+var expandJSON = expanded.toJSON();
 var apiJSONTemp = api.toJSON();
 if(options.debug) {
-  console.log(JSON.stringify(apiJSONTemp, null, 2));
+  console.log(JSON.stringify(expandJSON, null, 2));
 }
 var expanded = tools.expandedForm(apiJSONTemp["types.User"], apiJSONTemp["types"], function(err, expanded) {
   console.log("=== EXPANDED TYPES ===");
@@ -37,7 +39,7 @@ for (var resNum = 0; resNum < api.resources().length; ++resNum) {
   processResource(api.resources()[resNum]);
 }
 
-if(options.json) writeDebug(api.toJSON());
+if(options.json) writeDebug(expandJSON);
 
 
 /**
