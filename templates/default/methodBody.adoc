@@ -2,7 +2,7 @@
 ==== Request
 {% for type, data in method.body %}                      {# foreach Method Body #}
 *Content-Type*: `{{type}}`
-{% if data.example %}                               {# if Method Body Example #}
+{% if data.example and examples %}                               {# if Method Body Example #}
 .Example request body
 [source,json]
 ----

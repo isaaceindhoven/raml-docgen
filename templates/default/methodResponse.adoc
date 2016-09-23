@@ -4,7 +4,7 @@
 ===== {{code}}
 {% for type, body in data.body %}                   {# foreach Response Body #}
 *Content-Type*: `{{type}}`
-{% if body.example %}                               {# if Response Body example #}
+{% if body.example and examples %}                               {# if Response Body example #}
 .Example response body
 [source,json]
 ----
