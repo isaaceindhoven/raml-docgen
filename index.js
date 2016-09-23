@@ -10,10 +10,20 @@ const optionDefinitions = [
   { name: 'template', alias: 't', type: String, defaultValue: 'default' },
   { name: 'style', alias: 's', type: String, required: false },
   { name: 'debug', alias: 'd', type: Boolean },
+  { name: 'json', alias: 'j', type: Boolean },
   { name: 'examples', alias: 'e', type: Boolean },
   { name: 'noExpand', alias: 'n', type: Boolean }
 ]
 const options = commandLineArgs(optionDefinitions)
+
+if(options.debug) {
+  console.log("Debug:      " + options.debug);
+  console.log("Write JSON: " + options.json);
+  console.log("Style:      " + options.style);
+  console.log("Template:   " + options.template);
+  console.log("Examples:   " + options.examples);
+  console.log("No expand:  " + options.noExpand);
+}
 
 // Configure Nunjucks
 var env = nunjucks.configure('templates/' + options.template);
@@ -21,27 +31,20 @@ var env = nunjucks.configure('templates/' + options.template);
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
-if(options.noExpand) {
-  var apiJSON = api.toJSON();
-} else {
-  var apiJSON = api.expand().toJSON();
-}
+
+if(options.noExpand != true) api = api.expand();
+
+var apiJSON = api.toJSON();
 
 // Recursively add parent URI variables and convert methods to UPPERCASE
 maintenance(apiJSON);
 
-if(options.debug) writeDebug(apiJSON);
+if(options.json) writeDebug(apiJSON);
 
-var res;
-console.log(options.style);
-console.log(options.template);
-console.log(options.debug);
-console.log(options.examples);
-console.log(options.noExpand);
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
 
-res = env.render('template.adoc', {
+var res = env.render('template.adoc', {
   api: apiJSON
 });
 
@@ -54,20 +57,18 @@ writeAsciidoc(res);
 * Also converts methods to UPPERCASE
 */
 function maintenance(api) {
-  // Gather types
-  types = {};
-  for(index in api.resourceTypes) {
-    for(name in api.resourceTypes[index]) {
-      types[name] = api.resourceTypes[index][name]
-    }
-  }
-
-  api.resources.forEach(function(node) {
-    nodeMaintenance(node, types);
-  });
+  api.resources.forEach(nodeMaintenance);
+  console.log("MAINTENANCE DONE, CHECKING");
+  //api.resources.forEach(echoNode);
 }
 
-function nodeMaintenance(node, types) {
+function echoNode(node) {
+  if(node.parentUri != undefined) console.log(node.parentUri + "" + node.relativeUri);
+  else console.log(node.relativeUri);
+  if(node.resources != undefined) node.resources.forEach(echoNode);
+}
+
+function nodeMaintenance(node) {
   // Convert method to uppercase
   if(node.methods != undefined && node.relativeUri != undefined) {
     node.methods.forEach(function(m){
@@ -75,18 +76,23 @@ function nodeMaintenance(node, types) {
     });
   }
 
-  // Node has children, output them too.
+  // Node has children, perform maintenance on them too
   if(node.resources != undefined) {
     node.resources.forEach(function(child) {
+      // Set parent Uri
       if(node.parentPath != undefined) child.parentPath = node.parentPath + "" + node.relativeUri;
       else child.parentPath = node.relativeUri;
-      if(node.uriParameters != undefined){
+
+      // inherit parent URI parameters
+      if(node.uriParameters != undefined) {
         if(child.uriParameters == undefined) child.uriParameters = {};
         for (var key in node.uriParameters) {
           child.uriParameters[key] = node.uriParameters[key];
         }
       }
-      nodeMaintenance(child, api);
+
+      // Recurse
+      nodeMaintenance(child);
     });
   }
 }

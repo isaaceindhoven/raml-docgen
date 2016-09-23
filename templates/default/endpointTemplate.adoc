@@ -1,5 +1,13 @@
-{% for method in endpoint.methods %}
-=== {{method.method}} {{endpoint.parentUri}}{{endpoint.relativeUri}}
+{% for method in endpoint.methods %}{% if method.displayName %}
+=== {{method.displayName}}{% else %}
+=== {{method.method}} {{endpoint.absoluteUri}}{% endif %}
+
+[source, http]
+----
+{{method.method}}  {{api.baseUri}}{{endpoint.absoluteUri}}
+
+{{endpoint.absoluteUri}}
+----
 {% if method.description %}
 ==== Description
 {{method.description}}
