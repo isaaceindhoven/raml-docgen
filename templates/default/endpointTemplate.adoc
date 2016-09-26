@@ -1,7 +1,8 @@
-{% for method in endpoint.methods %}{% if method.displayName %}
-=== {{method.displayName}}{% elif endpoint.displayName != endpoint.relativeUri %}
-=== {{endpoint.displayName}}{% else %}
-=== {{method.method}} {{endpoint.fullPath}}{% endif %}
+{% if endpoint.annotations.sectionHeader %}== {{endpoint.displayName}} {% elif endpoint.header %}== {{endpoint.header | capitalize}}{% endif %}
+{% for method in endpoint.methods %}
+=== {% if method.displayName %}{{method.displayName}}
+{% elif endpoint.displayName != endpoint.relativeUri %}{{endpoint.displayName}}
+{% else %}{{method.method}} {{endpoint.fullPath}}{% endif %}
 
 [source, http]
 ----

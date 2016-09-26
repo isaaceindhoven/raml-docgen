@@ -12,7 +12,9 @@
 {{api.description}}
 
 == Overview
+{% for documentation in api.documentation %}=== {{documentation.title}}
+{{documentation.content}}{% endfor %}
+
 Base URI: {{api.baseUri}}
 
-== Paths
 {% for endpoint in api.resources %}{% include 'endpointTemplate.adoc' %}{% endfor %}
