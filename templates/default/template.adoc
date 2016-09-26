@@ -18,3 +18,11 @@
 Base URI: {{api.baseUri}}
 
 {% for endpoint in api.resources %}{% include 'endpointTemplate.adoc' %}{% endfor %}
+
+<<<
+
+== Schemas
+
+WARNING: //TODO: This
+
+{% for schema in api.schemas %}{% include 'schemaTemplate.adoc' %}{% endfor %}

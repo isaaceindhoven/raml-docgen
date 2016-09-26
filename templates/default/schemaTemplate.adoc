@@ -1,0 +1,10 @@
+{% for name, data in schema %}
+=== {{data.displayName}}
+
+[source,json]
+----
+{{data | stringify | safe}}
+----
+
+<<<
+{% endfor %}

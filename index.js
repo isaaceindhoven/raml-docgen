@@ -13,8 +13,9 @@ const optionDefinitions = [
   { name: 'json', alias: 'j', type: Boolean },
   { name: 'examples', alias: 'e', type: Boolean },
   { name: 'noExpand', alias: 'n', type: Boolean },
-  { name: 'headerregex', alias: 'h', type: String, required: false},
-  { name: 'headerannotation', alias: 'a', type: String, required: false}
+  { name: 'headerregex', alias: 'h', type: String, required: false },
+  { name: 'headerannotation', alias: 'a', type: String, required: false },
+  { name: 'schemalocation', alias: 'l', type: String, required: false }
 ]
 const options = commandLineArgs(optionDefinitions)
 
@@ -36,7 +37,7 @@ var env = nunjucks.configure('templates/' + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
 env.addFilter('stringify', function(str) {
-    return JSON.stringify(str, " ", 2);
+  return JSON.stringify(str, " ", 2);
 });
 
 // Read API
@@ -44,6 +45,13 @@ var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
 if(options.noExpand != true) api = api.expand();
 var apiJSON = api.toJSON();
+
+writeSchema(apiJSON.schemas);
+
+if(api.errors() != undefined) {
+  writeErrors(api.errors());
+  console.log("!!! API parser found errors in RAML spec, see errors.json for details !!!");
+}
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
 apiJSON = maintenance(apiJSON, headerRegexp);
@@ -56,6 +64,22 @@ var res = env.render('template.adoc', {
 
 // Save asciidoc
 writeAsciidoc(res);
+
+
+// New maintenance method to support schemas
+function newMaintenance(api, pattern) {
+  api.resources.forEach(function(node) {
+    nodeMaintenance(node, pattern);
+  });
+
+  api.schemas.forEach(function(schema) {
+    for(i in schema) {
+      var data = schema[i];
+      //TODO: Expand schemas to document them.
+    }
+  });
+
+}
 
 function maintenance(node, pattern) {
   if(node.relativeUri != undefined) {
@@ -70,14 +94,12 @@ function maintenance(node, pattern) {
     if(pattern != undefined) {
       var match = pattern.exec(node.fullPath);
       if(match != null) {
-        if(options.debug) console.log("Found section: " + match[1]);
         node.header = match[1];
       }
     }
 
     // Find headers using annotation
     if(node.annotations != undefined && node.annotations[options.headerannotation] != undefined) {
-      if(options.debug) console.log("Found section: " + node.annotations[options.headerannotation].structuredValue);
       node.header = node.annotations[options.headerannotation].structuredValue;
     }
   }
@@ -118,6 +140,22 @@ function writeAsciidoc(templateString) {
 
 function writeDebug(apiJSON) {
   fs.writeFile("api.json", JSON.stringify(apiJSON, " ", 2), function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
+}
+
+function writeErrors(errors) {
+  fs.writeFile("errors.json", JSON.stringify(errors, " ", 2), function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
+}
+
+function writeSchema(schemaJSON) {
+  fs.writeFile("schemas.json", JSON.stringify(schemaJSON, " ", 2), function(err) {
     if(err) {
       return console.log(err);
     }
