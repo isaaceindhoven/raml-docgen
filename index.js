@@ -33,23 +33,20 @@ if(options.headerregex != undefined) var headerRegexp = new RegExp(options.heade
 
 // Configure Nunjucks
 var env = nunjucks.configure('templates/' + options.template);
+if(options.style != undefined) env.addGlobal("style", options.style);
+if(options.examples) env.addGlobal("examples", true);
+if(options.headerannotation != undefined) env.addGlobal("headerAnnotation", options.headerannotation);
 
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
-
 if(options.noExpand != true) api = api.expand();
-
 var apiJSON = api.toJSON();
 
-// Recursively add parent URI variables and convert methods to UPPERCASE
+// Perform maintenance on resources, includes assigning fullPath and finding section headings
 apiJSON = maintenance(apiJSON, headerRegexp);
 
 if(options.json) writeDebug(apiJSON);
-
-if(options.style != undefined) env.addGlobal("style", options.style);
-if(options.examples) env.addGlobal("examples", true);
-if(options.headerannotation != undefined) env.addGlobal("headerAnnotation", options.headerannotation);
 
 var res = env.render('template.adoc', {
   api: apiJSON
@@ -57,12 +54,6 @@ var res = env.render('template.adoc', {
 
 // Save asciidoc
 writeAsciidoc(res);
-
-function echoNode(node) {
-  if(node.parentUri != undefined) console.log(node.parentUri + "" + node.relativeUri);
-  else console.log(node.relativeUri);
-  if(node.resources != undefined) node.resources.forEach(echoNode);
-}
 
 function maintenance(node, pattern) {
   if(node.relativeUri != undefined) {
@@ -88,7 +79,7 @@ function maintenance(node, pattern) {
       node.header = node.annotations[options.headerannotation].structuredValue;
     }
   }
-  
+
   // Node has children, perform maintenance on them too
   if(node.resources != undefined) {
     node.resources.forEach(function(child) {
