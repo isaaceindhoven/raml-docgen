@@ -88,6 +88,7 @@ function maintenance(node, pattern) {
       node.header = node.annotations[options.headerannotation].structuredValue;
     }
   }
+  
   // Node has children, perform maintenance on them too
   if(node.resources != undefined) {
     node.resources.forEach(function(child) {
@@ -98,6 +99,7 @@ function maintenance(node, pattern) {
       } else {
         child.fullPath = child.relativeUri;
       }
+
       // inherit parent URI parameters
       if(node.uriParameters != undefined) {
         if(child.uriParameters == undefined) child.uriParameters = {};

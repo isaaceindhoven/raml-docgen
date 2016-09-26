@@ -40,4 +40,5 @@ The program supports the following flags:
 -e, --examples          Include examples in generated output
 -n, --noExpand          Do not expand types in generated output
 -h, --headerregex       JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
+-a, --headerannotation  RAML Annotation used to identify section headings. Should be a string containing the preferred heading text
 ----

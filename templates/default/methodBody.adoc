@@ -6,7 +6,7 @@
 .Example request body
 [source,json]
 ----
-{{data.structuredExample | safe}}
+{{data.example | safe}}
 ----
 {% endif %}                                         {# if Method Body Example #}
 {% if data.formParameters %}                        {# if Method Form Parameters #}
