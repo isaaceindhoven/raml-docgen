@@ -37,7 +37,7 @@ if(options.noExpand != true) api = api.expand();
 var apiJSON = api.toJSON();
 
 // Recursively add parent URI variables and convert methods to UPPERCASE
-maintenance(apiJSON);
+apiJSON = maintenance(apiJSON);
 
 if(options.json) writeDebug(apiJSON);
 
@@ -57,9 +57,11 @@ writeAsciidoc(res);
 * Also converts methods to UPPERCASE
 */
 function maintenance(api) {
-  api.resources.forEach(nodeMaintenance);
+  //var returned = api.resources.forEach(nodeMaintenance);
+  var returned = nodeMaintenance(api);
   console.log("MAINTENANCE DONE, CHECKING");
   //api.resources.forEach(echoNode);
+  return returned;
 }
 
 function echoNode(node) {
@@ -82,6 +84,7 @@ function nodeMaintenance(node) {
       // Set parent Uri
       if(node.parentPath != undefined) child.parentPath = node.parentPath + "" + node.relativeUri;
       else child.parentPath = node.relativeUri;
+      child.fullPath = child.parentPath + "" + child.relativeUri;
 
       // inherit parent URI parameters
       if(node.uriParameters != undefined) {
@@ -92,9 +95,10 @@ function nodeMaintenance(node) {
       }
 
       // Recurse
-      nodeMaintenance(child);
+      child = nodeMaintenance(child);
     });
   }
+  return node;
 }
 
 function writeAsciidoc(templateString) {

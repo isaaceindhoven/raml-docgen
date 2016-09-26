@@ -1,12 +1,11 @@
 {% for method in endpoint.methods %}{% if method.displayName %}
-=== {{method.displayName}}{% else %}
-=== {{method.method}} {{endpoint.absoluteUri}}{% endif %}
+=== {{method.displayName}}{% elif endpoint.displayName != endpoint.relativeUri %}
+=== {{endpoint.displayName}}{% else %}
+=== {{method.method}} {{endpoint.fullPath}}{% endif %}
 
 [source, http]
 ----
-{{method.method}}  {{api.baseUri}}{{endpoint.absoluteUri}}
-
-{{endpoint.absoluteUri}}
+{{method.method}}  {{api.baseUri}}{{endpoint.fullPath}}
 ----
 {% if method.description %}
 ==== Description
