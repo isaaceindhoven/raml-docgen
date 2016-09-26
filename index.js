@@ -35,7 +35,9 @@ if(options.headerregex != undefined) var headerRegexp = new RegExp(options.heade
 var env = nunjucks.configure('templates/' + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
-if(options.headerannotation != undefined) env.addGlobal("headerAnnotation", options.headerannotation);
+env.addFilter('stringify', function(str) {
+    return JSON.stringify(str, " ", 2);
+});
 
 // Read API
 var fName = path.resolve(__dirname, options.input);

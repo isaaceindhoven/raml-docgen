@@ -8,7 +8,7 @@
 .Example {{code}} response body
 [source,json]
 ----
-{{body.example | safe}}
+{{body.example | stringify | safe}}
 ----
 {% endif %}                                         {# if Response Body example #}
 {% endfor %}                                        {# foreach Response Body #}
