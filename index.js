@@ -13,21 +13,23 @@ const optionDefinitions = [
   { name: 'json', alias: 'j', type: Boolean },
   { name: 'examples', alias: 'e', type: Boolean },
   { name: 'noExpand', alias: 'n', type: Boolean },
-  { name: 'headerregex', alias: 'h', type: String, required: false}
+  { name: 'headerregex', alias: 'h', type: String, required: false},
+  { name: 'headerannotation', alias: 'a', type: String, required: false}
 ]
 const options = commandLineArgs(optionDefinitions)
 
 if(options.debug) {
-  console.log("Debug:        " + options.debug);
-  console.log("Write JSON:   " + options.json);
-  console.log("Style:        " + options.style);
-  console.log("Template:     " + options.template);
-  console.log("Examples:     " + options.examples);
-  console.log("No expand:    " + options.noExpand);
-  console.log("Header Regex: " + options.headerregex);
+  console.log("Debug:             " + options.debug);
+  console.log("Write JSON:        " + options.json);
+  console.log("Style:             " + options.style);
+  console.log("Template:          " + options.template);
+  console.log("Examples:          " + options.examples);
+  console.log("No expand:         " + options.noExpand);
+  console.log("Header Regex:      " + options.headerregex);
+  console.log("Header Annotation: " + options.headerannotation);
 }
 
-var headerRegexp = new RegExp(options.headerregex);
+if(options.headerregex != undefined) var headerRegexp = new RegExp(options.headerregex);
 
 // Configure Nunjucks
 var env = nunjucks.configure('templates/' + options.template);
@@ -47,6 +49,7 @@ if(options.json) writeDebug(apiJSON);
 
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
+if(options.headerannotation != undefined) env.addGlobal("headerAnnotation", options.headerannotation);
 
 var res = env.render('template.adoc', {
   api: apiJSON
@@ -70,11 +73,19 @@ function maintenance(node, pattern) {
       });
     }
 
-    // Find headers
-    var match = pattern.exec(node.fullPath);
-    if(match != null) {
-      if(options.debug) console.log("Found section: " + match[1]);
-      node.header = match[1];
+    // Find headers using regex
+    if(pattern != undefined) {
+      var match = pattern.exec(node.fullPath);
+      if(match != null) {
+        if(options.debug) console.log("Found section: " + match[1]);
+        node.header = match[1];
+      }
+    }
+
+    // Find headers using annotation
+    if(node.annotations != undefined && node.annotations[options.headerannotation] != undefined) {
+      if(options.debug) console.log("Found section: " + node.annotations[options.headerannotation].structuredValue);
+      node.header = node.annotations[options.headerannotation].structuredValue;
     }
   }
   // Node has children, perform maintenance on them too
