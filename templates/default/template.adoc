@@ -15,6 +15,4 @@
 Base URI: {{api.baseUri}}
 
 == Paths
-{% for endpoint in api.resources %}                 {# foreach Endpoints #}
-{% include 'endpointTemplate.adoc' %}
-{% endfor %}                                        {# foreach Endpoints #}
+{% for endpoint in api.resources %}{% include 'endpointTemplate.adoc' %}{% endfor %}

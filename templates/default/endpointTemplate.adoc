@@ -11,6 +11,7 @@
 ==== Description
 {{method.description}}
 {% endif %}
+
 {% if method.protocols %}
 ==== Protocols
 {% for p in method.protocols %}
