@@ -28,6 +28,7 @@ if(options.debug) {
   console.log("No expand:         " + options.noExpand);
   console.log("Header Regex:      " + options.headerregex);
   console.log("Header Annotation: " + options.headerannotation);
+  console.log("Schema Location:   " + options.schemalocation);
 }
 
 if(options.headerregex != undefined) var headerRegexp = new RegExp(options.headerregex);
