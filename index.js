@@ -40,7 +40,12 @@ if(options.examples) env.addGlobal("examples", true);
 
 // JSON Stringify filter
 env.addFilter('stringify', function(str) {
+  if(str.type != undefined) str.type = JSON.parse(str.type);
   return JSON.stringify(str, " ", 2);
+});
+
+env.addFilter('parse', function(str) {
+  return JSON.stringify(JSON.parse(str), " ", 2);
 });
 
 // Anchor filter

@@ -3,7 +3,7 @@
 
 [source,json]
 ----
-{{data | stringify | safe}}
+{{data.type | parse | safe}}
 ----
 
 <<<
