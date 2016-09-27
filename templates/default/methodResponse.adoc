@@ -6,6 +6,8 @@
 *Content-Type*: `{{type}}`
 {% if body.schema %}
 *Schema*: <<{{body.schema | makeAnchor('schema')}}, `{{body.schema}}`>>{% endif %}
+{% if body.type %}
+*Type*: <<{{body.type | makeAnchor('schema')}}, `{{body.type}}`>>{% endif %}
 {% if body.example and examples %}                               {# if Response Body example #}
 .Example {{code}} response body.
 [source,json]

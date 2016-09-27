@@ -2,6 +2,7 @@ var raml = require("raml-1-parser");
 var fs = require("fs");
 var path = require("path");
 var nunjucks = require("nunjucks");
+// Could use json-schema-ref-parser for JSON schema parsing
 
 // Handle command line arguments
 const commandLineArgs = require('command-line-args')
@@ -44,6 +45,7 @@ env.addFilter('stringify', function(str) {
   return JSON.stringify(str, " ", 2);
 });
 
+// Parse and then JSON Stringify to get rid of escaped characters
 env.addFilter('parse', function(str) {
   return JSON.stringify(JSON.parse(str), " ", 2);
 });

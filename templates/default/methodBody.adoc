@@ -2,6 +2,10 @@
 ==== Request
 {% for type, data in method.body %}                      {# foreach Method Body #}
 *Content-Type*: `{{type}}`
+{% if data.schema %}
+*Schema*: <<{{data.schema | makeAnchor('schema')}}, `{{data.schema}}`>>{% endif %}
+{% if data.type %}
+*Type*: <<{{data.type | makeAnchor('schema')}}, `{{data.type}}`>>{% endif %}
 {% if data.example and examples %}                               {# if Method Body Example #}
 .Example request body
 [source,json]

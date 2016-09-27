@@ -26,3 +26,4 @@ Base URI: {{api.baseUri}}
 WARNING: //TODO: This
 
 {% for schema in api.schemas %}{% include 'schemaTemplate.adoc' %}{% endfor %}
+{% for schema in api.types %}{% include 'schemaTemplate.adoc' %}{% endfor %}
