@@ -5,7 +5,7 @@
 {% for type, body in data.body %}                   {# foreach Response Body #}
 *Content-Type*: `{{type}}`
 {% if body.schema %}
-*Schema*: `{{body.schema}}`{% endif %}
+*Schema*: <<{{body.schema | makeAnchor('schema')}}, `{{body.schema}}`>>{% endif %}
 {% if body.example and examples %}                               {# if Response Body example #}
 .Example {{code}} response body.
 [source,json]

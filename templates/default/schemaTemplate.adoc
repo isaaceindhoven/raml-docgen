@@ -1,5 +1,5 @@
 {% for name, data in schema %}
-=== {{data.displayName}}
+=== [[{{data.displayName | makeAnchor('schema')}}]]{{data.displayName}}
 
 [source,json]
 ----

@@ -37,8 +37,18 @@ if(options.headerregex != undefined) var headerRegexp = new RegExp(options.heade
 var env = nunjucks.configure('templates/' + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
+
+// JSON Stringify filter
 env.addFilter('stringify', function(str) {
   return JSON.stringify(str, " ", 2);
+});
+
+// Anchor filter
+env.addFilter('makeAnchor', function(str, prefix) {
+  var pattern = "/[^\w]/i";
+  var regExp = new RegExp(pattern);
+  var replaced = String(str).replace(regExp, '-');
+  return "anchor-" + prefix + "-" + replaced;
 });
 
 // Read API
