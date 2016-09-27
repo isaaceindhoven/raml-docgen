@@ -32,13 +32,31 @@ node index.js --input api.raml --template myTemplate
 The program supports the following flags:
 [source]
 ----
--i, --input             Relative path to file containing RAML spec
--t, --template          Name of Nunjucks template to use, stored in templates/<name>/template.adoc
--s, --style             asciidoctor-pdf theme name, stored in themes/<name>-theme.yml
--d, --debug             Be more verbose
--j, --json              Write parsed API to api.json
--e, --examples          Include examples in generated output
--n, --noExpand          Do not expand types in generated output
--h, --headerregex       JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
--a, --headerannotation  RAML Annotation used to identify section headings. Should be a string containing the preferred heading text
+-i, --input             STRING Relative path to file containing RAML spec
+-t, --template          STRING Name of Nunjucks template to use, stored in templates/<name>/template.adoc
+-s, --style             STRING asciidoctor-pdf theme name, stored in themes/<name>-theme.yml
+-d, --debug             BOOLEAN Be more verbose
+-j, --json              BOOLEAN Write parsed API to api.json
+-e, --examples          BOOLEAN Include examples in generated output
+-n, --noExpand          BOOLEAN Do not expand types in generated output
+-h, --headerregex       STRING JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
+-a, --headerannotation  STRING RAML Annotation used to identify section headings. Should be a string containing the preferred heading text
+-c, --config            STRING File containing json formatted config
+----
+
+== Config file
+You can read the config from a file instead of having to use flags to define all options. Options given from the command line override those stored in the config file. Booleans will be false if they are not defined.
+
+[source, json]
+.Example config file
+----
+{
+  "input": "spec.raml",
+  "template": "default",
+  "debug": true,
+  "json": false,
+  "examples": true,
+  "noExpand": false,
+  "headerregex": "\\/{version}\\/(\\w+)$",
+}
 ----
