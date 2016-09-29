@@ -41,9 +41,8 @@ var env = nunjucks.configure("templates/" + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
 if(options.examples) env.addGlobal("examples", true);
 
-// JSON Stringify filter
+// Basically the same as default 'dump' filter, but includes line breaks and tabs for readability
 env.addFilter("stringify", function(str) {
-  if(str.type != undefined) str.type = JSON.parse(str.type);
   return JSON.stringify(str, " ", 2);
 });
 
@@ -94,14 +93,24 @@ writeAsciidoc(
 
 function parseSchemas(api) {
   if(api.schemas != undefined) {
-    for(var i in api.schemas) {
-      var schema = api.schemas[i];
-      for(var d in schema) {
-        if(schema[d].type != undefined) schema[d].type = JSON.parse(schema[d].type);
-      }
-    }
+    api.schemas = parseSchema(api.schemas);
+  }
+  if(api.types != undefined) {
+    api.types = parseSchema(api.types);
   }
   return api;
+}
+
+function parseSchema(input) {
+  for(var i in input) {
+    var schema = input[i];
+    for(var d in schema) {
+      // console.log(schema[d].type);
+      if(schema[d].type != undefined) schema[d].type = JSON.parse(schema[d].type);
+      // console.log(schema[d].type);
+    }
+  }
+  return input;
 }
 
 // Convert methods to uppercase, assign fullPath, find headers

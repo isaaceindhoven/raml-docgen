@@ -1,7 +1,13 @@
 {% for name, data in schema %}
-=== [[{{data.displayName | makeAnchor('schema')}}]]{{data.displayName}}
-
-{% if data.type.properties %}
+[[{{data.displayName | makeAnchor('schema')}}]]
+=== {{data.displayName}}
+{#}
+[source,json]
+----
+{{data.type | dump | safe}}
+----
+{#}
+{% if not data.type["$schema"] %}
 [options="header", cols="1,2,1,1"]
 |===
 | Name | Description | Required | Schema
@@ -18,7 +24,7 @@ _{{vname}}_: {{value}}{% endif %}{% endfor %}
 {% else %}
 [source,json]
 ----
-{{data.type | parse | safe}}
+{{data.type | stringify | safe}}
 ----
 {% endif %}
 <<<
