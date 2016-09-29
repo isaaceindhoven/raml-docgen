@@ -47,7 +47,7 @@ env.addFilter("stringify", function(str) {
   return JSON.stringify(str, " ", 2);
 });
 
-// Parse and then JSON Stringify to get rid of escaped characters
+// JSON parse and then stringify object
 env.addFilter("parse", function(str) {
   return JSON.stringify(JSON.parse(str), " ", 2);
 });
@@ -68,7 +68,7 @@ var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
 
 // Write API errors to errors.json
-if(api.errors() != undefined) writeErrors(api.errors());
+if(api.errors()[0] != undefined) writeErrors(api.errors());
 
 if(options.noExpand != true) api = api.expand();
 var apiJSON = api.toJSON();
@@ -76,6 +76,7 @@ var apiJSON = api.toJSON();
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
 apiJSON = maintenance(apiJSON, headerRegexp);
+apiJSON = parseSchemas(apiJSON);
 
 // User wants to see the JSON output, let's give it to them
 if(options.json) writeDebug(apiJSON);
@@ -90,6 +91,18 @@ writeAsciidoc(
 // ###########
 //  Functions
 // ###########
+
+function parseSchemas(api) {
+  if(api.schemas != undefined) {
+    for(var i in api.schemas) {
+      var schema = api.schemas[i];
+      for(var d in schema) {
+        if(schema[d].type != undefined) schema[d].type = JSON.parse(schema[d].type);
+      }
+    }
+  }
+  return api;
+}
 
 // Convert methods to uppercase, assign fullPath, find headers
 function maintenance(node, pattern) {

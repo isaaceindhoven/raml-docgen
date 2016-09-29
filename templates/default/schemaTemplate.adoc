@@ -1,10 +1,25 @@
 {% for name, data in schema %}
 === [[{{data.displayName | makeAnchor('schema')}}]]{{data.displayName}}
 
+{% if data.type.properties %}
+[options="header", cols="1,2,1,1"]
+|===
+| Name | Description | Required | Schema
+
+{% for n, property in data.type.properties %}
+| {{n}}
+| {{property.description}}{% for vname, value in property %}{% if vname != 'description' and vname != 'type' %} +
+_{{vname}}_: {{value}}{% endif %}{% endfor %}
+| {% for req in data.type.required %}{% if req == n %}*Required*{% endif %}{% endfor %}
+| {{property.type}}
+{% endfor %}
+
+|===
+{% else %}
 [source,json]
 ----
 {{data.type | parse | safe}}
 ----
-
+{% endif %}
 <<<
 {% endfor %}
