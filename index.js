@@ -1,10 +1,4 @@
 "use strict";
-var dependencyErrors = {};
-require('check-dependencies')({
-  packageManager: 'npm'
-}).then(function (output) {
-  dependencyErrors = output.errors;
-});
 var raml = require("raml-1-parser");
 var fs = require("fs");
 var path = require("path");
@@ -34,10 +28,6 @@ if(options.debug) {
   console.log("\tSettings:");
   console.log(JSON.stringify(options, null, 2));
   console.log();
-  if(dependencyErrors.length > 0) {
-    console.log("\tDEPENDENCY ERRORS:")
-    console.log(JSON.stringify(dependencyErrors, null, 2));
-  }
 }
 
 verifyOptions(requiredOptions);
