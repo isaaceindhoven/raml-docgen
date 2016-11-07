@@ -4,7 +4,7 @@ var fs = require("fs");
 var path = require("path");
 var nunjucks = require("nunjucks");
 var commandLineArgs = require("command-line-args");
-// Could use json-schema-ref-parser for JSON schema parsing
+var $RefParser = require('json-schema-ref-parser');
 
 var requiredOptions = ["input", "template"];
 
@@ -18,7 +18,8 @@ var optionDefinitions = [
   { name: "noExpand",         alias: "n", type: Boolean },
   { name: "headerregex",      alias: "h", type: String },
   { name: "headerannotation", alias: "a", type: String },
-  { name: "config",           alias: "c", type: String }
+  { name: "config",           alias: "c", type: String },
+  { name: "schemapath",       alias: "p", type: String }
 ];
 
 var options = getOptions(optionDefinitions);
@@ -55,10 +56,14 @@ env.addFilter("parse", function(str) {
 
 // Anchor filter
 env.addFilter("makeAnchor", function(str, prefix) {
+  return makeAnchor(str, prefix);
+});
+
+function makeAnchor(str, prefix) {
   var regExp = new RegExp("/[^\\w]/i");
   var replaced = String(str).replace(regExp, "-");
   return "anchor-" + prefix + "-" + replaced;
-});
+};
 
 // ##########
 //    API
@@ -77,8 +82,10 @@ var apiJSON = api.toJSON();
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
 apiJSON = maintenance(apiJSON, headerRegexp);
-apiJSON.types.forEach(typeMaintenance);
 apiJSON = parseSchemas(apiJSON);
+apiJSON.parsedTypes = typeMaintenance(api);
+
+// apiJSON.types = apiJSON.types.forEach(typeMaintenance);
 
 // User wants to see the JSON output, let's give it to them
 if(options.json) writeDebug(apiJSON);
@@ -116,8 +123,22 @@ function parseSchema(input) {
   return input;
 }
 
-function typeMaintenance(item, index) {
-  console.log(item.name);
+function typeMaintenance(api) {
+  var parser = new $RefParser();
+  parser.bundle("my-schema.json");
+  var resolved = {};
+  api.types().forEach(function(type){
+    var temp = type.toJSON()[type.name()];
+    if(temp.schemaPath != undefined) {
+      // We have some dereferencing to do!
+      parser.parse(options.schemapath + temp.schemaPath)
+      .then(function(schema){
+        resolved[schema.title] = schema;
+        console.log(resolved);
+      });
+    }
+  });
+  return resolved;
 }
 
 // Convert methods to uppercase, assign fullPath, find headers
