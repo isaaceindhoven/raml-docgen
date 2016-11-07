@@ -25,7 +25,9 @@ var options = getOptions(optionDefinitions);
 
 if(options.debug) {
   console.log("\tDEBUG INFO:");
+  console.log("\tSettings:");
   console.log(JSON.stringify(options, null, 2));
+  console.log();
 }
 
 verifyOptions(requiredOptions);
@@ -75,6 +77,7 @@ var apiJSON = api.toJSON();
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
 apiJSON = maintenance(apiJSON, headerRegexp);
+apiJSON.types.forEach(typeMaintenance);
 apiJSON = parseSchemas(apiJSON);
 
 // User wants to see the JSON output, let's give it to them
@@ -111,6 +114,10 @@ function parseSchema(input) {
     }
   }
   return input;
+}
+
+function typeMaintenance(item, index) {
+  console.log(item.name);
 }
 
 // Convert methods to uppercase, assign fullPath, find headers

@@ -1,0 +1,14 @@
+{% if properties.type != "object" %}
+
+| {{name}}
+| {{properties | stringify | safe}}
+
+{% else %}
+
+{# TODO: Convert $ref's to anchor linking to referred object definition #}
+
+{% for name, properties in properties.properties -%}
+{% include "schemaJsonRowTemplate.adoc" %}
+{%- endfor %}
+
+{% endif %}

@@ -3,6 +3,7 @@
 === {% if method.displayName %}{{method.displayName}}
 {% elif endpoint.displayName != endpoint.relativeUri %}{{endpoint.displayName}}
 {% else %}{{method.method}} {{endpoint.fullPath}}{% endif %}
+{{endpoint.absoluteUri}}
 
 [source, http]
 ----
