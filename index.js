@@ -6,6 +6,8 @@ var nunjucks = require("nunjucks");
 var commandLineArgs = require("command-line-args");
 var $RefParser = require('json-schema-ref-parser');
 
+console.time("everything");
+
 var requiredOptions = ["input", "template"];
 
 var optionDefinitions = [
@@ -38,7 +40,7 @@ if(options.headerregex != undefined) var headerRegexp = new RegExp(options.heade
 // ##########
 //  Nunjucks
 // ##########
-
+console.time("configure_nunjucks");
 // Configure Nunjucks
 var env = nunjucks.configure("templates/" + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
@@ -59,20 +61,29 @@ env.addFilter("makeAnchor", function(str, prefix) {
   return makeAnchor(str, prefix);
 });
 
+env.addFilter("makeRefAnchor", function(str, prefix) {
+  var regExp = new RegExp("/[^\\w]/i");
+  var name = String(str);
+  var nameParts = name.split("/");
+  var name = nameParts[nameParts.length - 1];
+  var replaced = name.replace(regExp, "-");
+  return "anchor-" + prefix + "-" + replaced.toLowerCase();
+});
+
 function makeAnchor(str, prefix) {
   var regExp = new RegExp("/[^\\w]/i");
   var replaced = String(str).replace(regExp, "-");
-  return "anchor-" + prefix + "-" + replaced;
+  return "anchor-" + prefix + "-" + replaced.toLowerCase();
 };
-
+console.timeEnd("configure_nunjucks");
 // ##########
 //    API
 // ##########
-
+console.time("read_api");
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
-
+console.timeEnd("read_api");
 // Write API errors to errors.json
 if(api.errors()[0] != undefined) writeErrors(api.errors());
 
@@ -81,46 +92,155 @@ var apiJSON = api.toJSON();
 
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
-apiJSON = maintenance(apiJSON, headerRegexp);
-apiJSON = parseSchemas(apiJSON);
-apiJSON.parsedTypes = typeMaintenance(api);
+console.time("maintenance");
 
-// apiJSON.types = apiJSON.types.forEach(typeMaintenance);
+apiJSON = maintenance(apiJSON, headerRegexp);
+
+console.timeEnd("maintenance");
+console.time("schemas");
+
+apiJSON.parsedSchemas = parseSchemas(apiJSON);
+
+var extraSchemas = {};
+findSchemas(apiJSON.parsedSchemas, extraSchemas);
+
+apiJSON.extraSchemas = extraSchemas;
+
+console.timeEnd("schemas");
 
 // User wants to see the JSON output, let's give it to them
 if(options.json) writeDebug(apiJSON);
 if(options.json) writeSchema(apiJSON.schemas);
+
+console.time("render_adoc");
+console.log("\n\nStart rendering\n\n")
 
 writeAsciidoc(
   env.render("template.adoc", {
     api: apiJSON
   })
 );
+console.timeEnd("render_adoc");
+console.timeEnd("everything");
 
 // ###########
 //  Functions
 // ###########
 
 function parseSchemas(api) {
+  var parsed = {};
   if(api.schemas != undefined) {
-    api.schemas = parseSchema(api.schemas);
+    parsed = parseSchema(api.schemas, parsed);
   }
   if(api.types != undefined) {
-    api.types = parseSchema(api.types);
+    parsed = parseSchema(api.types, parsed);
   }
-  return api;
+  return parsed;
 }
 
-function parseSchema(input) {
+// Go through all schemas to find $refs
+// TODO: Make this recursive
+function findSchemas(schemas, returned) {
+  for(var sname in schemas) {
+    if(schemas[sname].parsed) var schema = schemas[sname].parsedType;
+    else var schema = schemas[sname].type;
+    var path = schemas[sname].path;
+
+    schemas[sname].parsedType = iterateSchema(schema, path, returned)
+  }
+}
+
+// Go over a schema to find $refs
+function iterateSchema(schema, path, returned) {
+
+  for(var p in schema.properties) {
+    if(schema.properties[p].$ref != undefined) {
+      schema.properties[p].$ref = makeSchema(path, schema.properties[p].$ref, p, returned);
+    }
+  }
+  return schema;
+}
+
+// iterateSchema found a $ref, let's parse it
+// and add it to the list of found schemas
+function makeSchema(path, ref, name, returned) {
+  var parser = new $RefParser();
+  var data, done = false; // used to force synchrous parsing
+  parser.resolve(options.schemapath + path)
+  .then(function($refs){
+    var newSchema = {};
+
+    var result = $refs.get(ref);
+    var refsplit = ref.split("/");
+
+    // Store new data
+    newSchema.name = refsplit[refsplit.length -1];
+    newSchema.displayName = newSchema.name;
+    newSchema.parsedType = result;
+
+    // Build new path
+    var pathParts = path.split("/");
+    var newPath = "";
+    for(var i = 0; i < pathParts.length - 1; i++) {
+      newPath += pathParts[i] + "/";
+    }
+    newPath += ref.split("#")[0];
+    newSchema.path = newPath;
+
+    // Store original ref, might be useful in recursion
+    newSchema.ref = ref.split("#")[1];
+    returned[name] = newSchema;
+    data = name;
+    done = true;
+  });
+  require('deasync').loopWhile(function(){return !done;});
+  return name;
+}
+
+function parseSchema(input, parent) {
   for(var i in input) {
     var schema = input[i];
     for(var d in schema) {
-      // console.log(schema[d].type);
-      if(schema[d].type != undefined) schema[d].type = JSON.parse(schema[d].type);
-      // console.log(schema[d].type);
+      console.time("iteration\t" + schema[d].name);
+      if(schema[d].type != undefined) {
+        parent[d] = {};
+        parent[d].type = JSON.parse(schema[d].type);
+        parent[d].parsed = false;
+        if(schema[d].schemaPath != undefined) {
+          parent[d].parsed = true;
+          parent[d].parsedType = parseType(schema[d].schemaPath);
+        }
+        parent[d].path = schema[d].schemaPath;
+        parent[d].displayName = schema[d].displayName;
+        parent[d].name = schema[d].name;
+      }
+      console.timeEnd("iteration\t" + schema[d].name);
     }
   }
-  return input;
+  return parent;
+}
+
+function parseType(path) {
+  console.time("parseType\t" + path);
+  var parser = new $RefParser();
+  // Data used to force synchronous parsing
+  // Because json schema parser tool only supports async
+  // See https://github.com/BigstickCarpet/json-schema-ref-parser/issues/14
+  // TODO: Either support async or make this pretty
+  var data, done = false;
+  parser.parse(options.schemapath + path, function(err, schema){
+    if(err) {
+      console.error(err);
+      return;
+    }
+    //console.log(schema);
+    data = schema;
+    done = true;
+  });
+  // Force synchronous parsing
+  require('deasync').loopWhile(function(){return !done;});
+  console.timeEnd("parseType\t" + path);
+  return data;
 }
 
 function typeMaintenance(api) {

@@ -5,7 +5,7 @@
 {#}
 [source,json]
 ----
-{{data.type | dump | safe}}
+{{data | stringify | safe}}
 ----
 {#}
 {% if not data.type["$schema"] and not data.type["dereferenced"] %}
