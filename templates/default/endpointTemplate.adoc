@@ -6,7 +6,7 @@
 
 [source, http]
 ----
-{{method.method}}  {{endpoint.absoluteUri}}
+{{method.method | upper}}  {{endpoint.absoluteUri}}
 ----
 {% if method.description %}
 ==== Description

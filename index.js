@@ -127,17 +127,6 @@ console.timeEnd("everything");
 //  Functions
 // ###########
 
-function parseSchemas(api) {
-  var parsed = {};
-  if(api.schemas != undefined) {
-    parsed = parseSchema(api.schemas, parsed);
-  }
-  if(api.types != undefined) {
-    parsed = parseSchema(api.types, parsed);
-  }
-  return parsed;
-}
-
 // Go through all schemas to find $refs
 // TODO: Make this recursive
 function findSchemas(schemas, returned) {
@@ -197,6 +186,7 @@ function makeSchema(path, ref, name, returned) {
   return name;
 }
 
+// Dereference JSON schemas
 function parseSchema(input, parent) {
   for(var i in input) {
     var schema = input[i];
@@ -220,6 +210,7 @@ function parseSchema(input, parent) {
   return parent;
 }
 
+// Parse JSON schema - Basically converts it to a JS object
 function parseType(path) {
   console.time("parseType\t" + path);
   var parser = new $RefParser();
@@ -233,7 +224,6 @@ function parseType(path) {
       console.error(err);
       return;
     }
-    //console.log(schema);
     data = schema;
     done = true;
   });
@@ -264,16 +254,9 @@ function typeMaintenance(api) {
 // Convert methods to uppercase, assign fullPath, find headers
 function maintenance(node, pattern) {
   if(node.relativeUri != undefined) {
-    // Convert methods to uppercase
-    if(node.methods != undefined) {
-      node.methods.forEach(function(m){
-        m.method = m.method.toUpperCase();
-      });
-    }
-
     // Find headers using regex
     if(pattern != undefined) {
-      var match = pattern.exec(node.fullPath);
+      var match = pattern.exec(node.absoluteUri);
       if(match != null) {
         node.header = match[1];
       }
@@ -288,14 +271,6 @@ function maintenance(node, pattern) {
   // Node has children, perform maintenance on them too
   if(node.resources != undefined) {
     node.resources.forEach(function(child) {
-      // Set parent Uri and full path
-      if(node.fullPath != undefined) {
-        child.parentPath = node.fullPath;
-        child.fullPath = child.parentPath + "" + child.relativeUri;
-      } else {
-        child.fullPath = child.relativeUri;
-      }
-
       // inherit parent URI parameters
       if(node.uriParameters != undefined) {
         if(child.uriParameters == undefined) child.uriParameters = {};
@@ -338,6 +313,7 @@ function writeErrors(errors) {
   });
 }
 
+// Write JSON representation of schemas to schemas.json file
 function writeSchema(schemaJSON) {
   fs.writeFile("schemas.json", JSON.stringify(schemaJSON, " ", 2), function(err) {
     if(err) return console.log(err);
