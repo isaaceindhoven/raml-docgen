@@ -30,3 +30,4 @@ jspm_packages
 *.raml
 /spec/
 /themes
+/SO_question.md
