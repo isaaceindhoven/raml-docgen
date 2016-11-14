@@ -6,7 +6,7 @@ var nunjucks = require("nunjucks");
 var commandLineArgs = require("command-line-args");
 var $RefParser = require('json-schema-ref-parser');
 
-console.time("everything");
+console.time("Everything");
 
 var requiredOptions = ["input", "template"];
 
@@ -40,7 +40,7 @@ if(options.headerregex != undefined) var headerRegexp = new RegExp(options.heade
 // ##########
 //  Nunjucks
 // ##########
-console.time("configure_nunjucks");
+console.time("Configure Nunjucks");
 // Configure Nunjucks
 var env = nunjucks.configure("templates/" + options.template);
 if(options.style != undefined) env.addGlobal("style", options.style);
@@ -75,15 +75,15 @@ function makeAnchor(str, prefix) {
   var replaced = String(str).replace(regExp, "-");
   return "anchor-" + prefix + "-" + replaced.toLowerCase();
 };
-console.timeEnd("configure_nunjucks");
+console.timeEnd("Configure Nunjucks");
 // ##########
 //    API
 // ##########
-console.time("read_api");
+console.time("Read API");
 // Read API
 var fName = path.resolve(__dirname, options.input);
 var api = raml.loadApiSync(fName);
-console.timeEnd("read_api");
+console.timeEnd("Read API");
 // Write API errors to errors.json
 if(api.errors()[0] != undefined) writeErrors(api.errors());
 
@@ -92,12 +92,12 @@ var apiJSON = api.toJSON();
 
 
 // Perform maintenance on resources, includes assigning fullPath and finding section headings
-console.time("maintenance");
+console.time("Maintenance");
 
 apiJSON = maintenance(apiJSON, headerRegexp);
 
-console.timeEnd("maintenance");
-console.time("schemas");
+console.timeEnd("Maintenance");
+console.time("Parse JSON Schemas");
 
 apiJSON.parsedSchemas = parseSchemas(apiJSON);
 
@@ -106,26 +106,37 @@ findSchemas(apiJSON.parsedSchemas, extraSchemas);
 
 apiJSON.extraSchemas = extraSchemas;
 
-console.timeEnd("schemas");
+console.timeEnd("Parse JSON Schemas");
 
 // User wants to see the JSON output, let's give it to them
 if(options.json) writeDebug(apiJSON);
 if(options.json) writeSchema(apiJSON.schemas);
 
-console.time("render_adoc");
-console.log("\n\nStart rendering\n\n")
+console.time("Render Asciidoc");
 
 writeAsciidoc(
   env.render("template.adoc", {
     api: apiJSON
   })
 );
-console.timeEnd("render_adoc");
-console.timeEnd("everything");
+console.timeEnd("Render Asciidoc");
+console.timeEnd("Everything");
 
 // ###########
 //  Functions
 // ###########
+
+// Parse all JSON schemas in RAML spec
+function parseSchemas(api) {
+  var parsed = {};
+  if(api.schemas != undefined) {
+    parsed = parseSchema(api.schemas, parsed);
+  }
+  if(api.types != undefined) {
+    parsed = parseSchema(api.types, parsed);
+  }
+  return parsed;
+}
 
 // Go through all schemas to find $refs
 // TODO: Make this recursive
