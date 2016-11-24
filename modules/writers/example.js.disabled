@@ -1,0 +1,51 @@
+var fs = require("fs");
+
+/**
+ * Writer constructor
+ * @param Core Core object containing all global settings.
+ */
+function Example(Core){
+  this.c = Core;
+}
+
+// Change this to the name of your writer.
+// This should be the same as the name of the constructor above
+Example.prototype.name = "Example";
+
+/**
+ * All writers MUST have a write function
+ * This function is called after all parsing has been completed
+ *  to write a document using a JSON representation of the API.
+ *
+ * @param apiJSON JSON representation of the parsed API
+ */
+Example.prototype.write = function(apiJSON) {
+  // TODO: convert apiJSON to something pretty
+  var result = "";
+  this.writeFile(result);
+}
+
+/**
+ * All writers MUST have an init function
+ * This function is called before writing, and allows the writer
+ *  to perform some initialization tasks.
+ *
+ * For example, this can be used to set up a templating engine
+ */
+Example.prototype.init = function() {
+  // TODO: Initialize writer
+
+  var templateName = this.c.options.template;
+}
+
+/**
+ * Writers may contain their own functions
+ *
+ */
+Example.prototype.writeFile = function(rendered) {
+  fs.writeFile("api.adoc", rendered, function(err) {
+    if(err) return console.log(err);
+  });
+}
+
+module.exports = Example;

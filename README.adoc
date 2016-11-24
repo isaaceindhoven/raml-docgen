@@ -33,10 +33,10 @@ The program supports the following flags:
 [source]
 ----
 -i, --input             STRING    Relative path to file containing RAML spec
--t, --template          STRING    Name of Nunjucks template to use, stored in templates/<name>/template.adoc
+-t, --template          STRING    Name of template to use, stored in templates/<name>/template.adoc
 -s, --style             STRING    asciidoctor-pdf theme name, stored in themes/<name>-theme.yml
 -d, --debug             BOOLEAN   Be more verbose
--j, --json              BOOLEAN   Write parsed API to api.json
+-j, --json              BOOLEAN   Write parsed API and schemas to api.json
 -e, --examples          BOOLEAN   Include examples in generated output
 -n, --noExpand          BOOLEAN   Do not expand types in generated output
 -h, --headerregex       STRING    JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
@@ -62,3 +62,6 @@ You can read the config from a file instead of having to use flags to define all
   "schemapath": "spec/globalcollect/"
 }
 ----
+
+== Modules
+You can write your own writer modules to change the output from asciidoc to something else. see `modules/writers/` for examples.
