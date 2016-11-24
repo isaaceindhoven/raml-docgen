@@ -1,20 +1,12 @@
 "use strict";
-var dependencyErrors = {};
-require('check-dependencies')({
-  packageManager: 'npm'
-}).then(function (output) {
-  dependencyErrors = output.errors;
-});
 var raml = require("raml-1-parser");
 var fs = require("fs");
 var path = require("path");
-var nunjucks = require("nunjucks");
-var commandLineArgs = require("command-line-args");
-// Could use json-schema-ref-parser for JSON schema parsing
+var $RefParser = require('json-schema-ref-parser');
+var c = init();
 
-var requiredOptions = ["input", "template"];
-
-var optionDefinitions = [
+c.requiredOptions = ["input", "template"];
+c.optionDefinitions = [
   { name: "input",            alias: "i", type: String },
   { name: "template",         alias: "t", type: String },
   { name: "style",            alias: "s", type: String },
@@ -24,209 +16,51 @@ var optionDefinitions = [
   { name: "noExpand",         alias: "n", type: Boolean },
   { name: "headerregex",      alias: "h", type: String },
   { name: "headerannotation", alias: "a", type: String },
-  { name: "config",           alias: "c", type: String }
+  { name: "config",           alias: "c", type: String },
+  { name: "schemapath",       alias: "p", type: String }
 ];
+c.parseOptions();
+c.verifyOptions();
 
-var options = getOptions(optionDefinitions);
+var rap = new c.parsers.RAMLParser(c); // RAML Parser
+var jsp = new c.parsers.JsonSchemaParser(c); // JSON Schema Parser
 
-if(options.debug) {
-  console.log("\tDEBUG INFO:");
-  console.log("\tSettings:");
-  console.log(JSON.stringify(options, null, 2));
-  console.log();
-  if(dependencyErrors.length > 0) {
-    console.log("\tDEPENDENCY ERRORS:")
-    console.log(JSON.stringify(dependencyErrors, null, 2));
-  }
-}
-
-verifyOptions(requiredOptions);
-
-if(options.headerregex != undefined) var headerRegexp = new RegExp(options.headerregex);
-
-// ##########
-//  Nunjucks
-// ##########
-
-// Configure Nunjucks
-var env = nunjucks.configure("templates/" + options.template);
-if(options.style != undefined) env.addGlobal("style", options.style);
-if(options.examples) env.addGlobal("examples", true);
-
-// Basically the same as default 'dump' filter, but includes line breaks and tabs for readability
-env.addFilter("stringify", function(str) {
-  return JSON.stringify(str, " ", 2);
-});
-
-// JSON parse and then stringify object
-env.addFilter("parse", function(str) {
-  return JSON.stringify(JSON.parse(str), " ", 2);
-});
-
-// Anchor filter
-env.addFilter("makeAnchor", function(str, prefix) {
-  var regExp = new RegExp("/[^\\w]/i");
-  var replaced = String(str).replace(regExp, "-");
-  return "anchor-" + prefix + "-" + replaced;
-});
-
-// ##########
-//    API
-// ##########
-
-// Read API
-var fName = path.resolve(__dirname, options.input);
+// Read RAML API
+var fName = path.resolve(__dirname, c.options.input);
 var api = raml.loadApiSync(fName);
 
 // Write API errors to errors.json
-if(api.errors()[0] != undefined) writeErrors(api.errors());
+if(api.errors()[0] != undefined) c.writeErrors(api.errors());
 
-if(options.noExpand != true) api = api.expand();
+if(c.options.noExpand != true) api = api.expand();
 var apiJSON = api.toJSON();
 
 
-// Perform maintenance on resources, includes assigning fullPath and finding section headings
-apiJSON = maintenance(apiJSON, headerRegexp);
-apiJSON = parseSchemas(apiJSON);
+var extraSchemas = {};
+
+apiJSON = rap.maintenance(apiJSON, c.headerRegexp);
+apiJSON.parsedSchemas = jsp.parseSchemas(apiJSON);
+jsp.findSchemas(apiJSON.parsedSchemas, extraSchemas);
+apiJSON.extraSchemas = extraSchemas;
+
 
 // User wants to see the JSON output, let's give it to them
-if(options.json) writeDebug(apiJSON);
-if(options.json) writeSchema(apiJSON.schemas);
+if(c.options.json) c.writeDebug(apiJSON);
+if(c.options.json) c.writeSchema(apiJSON.parsedSchemas);
 
-writeAsciidoc(
-  env.render("template.adoc", {
-    api: apiJSON
-  })
-);
+// Write output using all available writers
+c.writerNames.forEach(function(writer) {
+  var w = new c.writers[writer](c);
+  w.init();
+  w.write(apiJSON);
+});
 
-// ###########
-//  Functions
-// ###########
+function init() {
+  var Core = require('./modules/Core');
+  var c = new Core();
 
-function parseSchemas(api) {
-  if(api.schemas != undefined) {
-    api.schemas = parseSchema(api.schemas);
-  }
-  if(api.types != undefined) {
-    api.types = parseSchema(api.types);
-  }
-  return api;
-}
+  c.loadParsers();
+  c.loadWriters();
 
-function parseSchema(input) {
-  for(var i in input) {
-    var schema = input[i];
-    for(var d in schema) {
-      // console.log(schema[d].type);
-      if(schema[d].type != undefined) schema[d].type = JSON.parse(schema[d].type);
-      // console.log(schema[d].type);
-    }
-  }
-  return input;
-}
-
-// Convert methods to uppercase, assign fullPath, find headers
-function maintenance(node, pattern) {
-  if(node.relativeUri != undefined) {
-    // Convert methods to uppercase
-    if(node.methods != undefined) {
-      node.methods.forEach(function(m){
-        m.method = m.method.toUpperCase();
-      });
-    }
-
-    // Find headers using regex
-    if(pattern != undefined) {
-      var match = pattern.exec(node.fullPath);
-      if(match != null) {
-        node.header = match[1];
-      }
-    }
-
-    // Find headers using annotation
-    if(node.annotations != undefined && node.annotations[options.headerannotation] != undefined) {
-      node.header = node.annotations[options.headerannotation].structuredValue;
-    }
-  }
-
-  // Node has children, perform maintenance on them too
-  if(node.resources != undefined) {
-    node.resources.forEach(function(child) {
-      // Set parent Uri and full path
-      if(node.fullPath != undefined) {
-        child.parentPath = node.fullPath;
-        child.fullPath = child.parentPath + "" + child.relativeUri;
-      } else {
-        child.fullPath = child.relativeUri;
-      }
-
-      // inherit parent URI parameters
-      if(node.uriParameters != undefined) {
-        if(child.uriParameters == undefined) child.uriParameters = {};
-
-        for(var key in node.uriParameters) {
-          child.uriParameters[key] = node.uriParameters[key]
-        }
-      }
-
-      // Recurse
-      child = maintenance(child, pattern);
-    });
-  }
-  return node;
-}
-
-// Write completed asciidoc to api.adoc
-function writeAsciidoc(templateString) {
-  fs.writeFile("api.adoc", templateString, function(err) {
-    if(err) {
-      return console.log(err);
-    }
-  })
-}
-
-// Write JSON representation of api to api.json file
-function writeDebug(apiJSON) {
-  fs.writeFile("api.json", JSON.stringify(apiJSON, " ", 2), function(err) {
-    if(err) {
-      return console.log(err);
-    }
-  });
-}
-
-// Write parser errors to errors.json
-function writeErrors(errors) {
-  fs.writeFile("errors.json", JSON.stringify(errors, " ", 2), function(err) {
-    if(err) return console.log(err);
-    else console.log("!!! API parser found errors in RAML spec, see errors.json for details !!!");
-  });
-}
-
-function writeSchema(schemaJSON) {
-  fs.writeFile("schemas.json", JSON.stringify(schemaJSON, " ", 2), function(err) {
-    if(err) return console.log(err);
-  });
-}
-
-// Get saved and command line options (flags)
-function getOptions(optionDefinitions) {
-  var cmdOptions = commandLineArgs(optionDefinitions);
-  var returned = {};
-
-  if(cmdOptions.config != undefined) returned = JSON.parse(fs.readFileSync(cmdOptions.config, "utf8"));
-
-  for(var key in cmdOptions) {
-    returned[key] = cmdOptions[key];
-  }
-
-  return returned;
-}
-
-// Verify that all required options are present
-function verifyOptions(requiredOptions) {
-  var missing = []
-  for(var i in requiredOptions) {
-    if(options[requiredOptions[i]] == undefined) missing.push(requiredOptions[i]);
-  }
-  if(missing.length > 0) throw "ERROR: \tMissing properties: " + missing.join(",");
+  return c;
 }

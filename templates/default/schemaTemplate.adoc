@@ -1,13 +1,14 @@
+{% import 'schemaJsonRowTemplate.adoc' as tableMacros %}
 {% for name, data in schema %}
 [[{{data.displayName | makeAnchor('schema')}}]]
 === {{data.displayName}}
 {#}
 [source,json]
 ----
-{{data.type | dump | safe}}
+{{data | stringify | safe}}
 ----
 {#}
-{% if not data.type["$schema"] %}
+{% if not data.type["$schema"] and not data.type["dereferenced"] %}
 [options="header", cols="1,2,1,1"]
 |===
 | Name | Description | Required | Schema
@@ -21,6 +22,26 @@ _{{vname}}_: {{value}}{% endif %}{% endfor %}
 {% endfor %}
 
 |===
+{% elif data.type["dereferenced"] %}
+
+[options="header", cols="1,3"]
+|===
+| Name | Schema
+
+{% for ao in data.type.allOf %}
+
+{% if ao.properties %}
+{% for name, properties in ao.properties %}
+
+{% include "schemaJsonRowTemplate.adoc" %}
+
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+
+|===
+
 {% else %}
 [source,json]
 ----

@@ -42,6 +42,7 @@ The program supports the following flags:
 -h, --headerregex       STRING    JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
 -a, --headerannotation  STRING    RAML Annotation used to identify section headings. Should be a string containing the preferred heading text
 -c, --config            STRING    File containing json formatted config
+-p, --schemapath        STRING    Path to root of al schemas, used for JSON schema resolution. This is usually the same directory as the RAML spec
 ----
 
 == Config file
@@ -58,5 +59,6 @@ You can read the config from a file instead of having to use flags to define all
   "examples": true,
   "noExpand": false,
   "headerregex": "\\/{version}\\/(\\w+)$",
+  "schemapath": "spec/globalcollect/"
 }
 ----

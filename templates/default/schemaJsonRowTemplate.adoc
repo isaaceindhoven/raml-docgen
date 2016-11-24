@@ -1,0 +1,24 @@
+{# TODO: Convert $ref's to anchor linking to referred object definition #}
+{% if properties.type != "object" %}
+
+{% if properties.item.type != "object" %}
+
+| {{name}}
+{% if properties.type == "array" -%}| array[]
+{% else %}| {{properties.type}}{% endif %}
+| {% for n, v in properties -%}
+{% if n != "type" and n != "$ref" -%}**{{n}}:** {{v}} +{%- endif %}
+{% if n == "$ref" -%} **Ref:** <<{{v | makeRefAnchor('schema')}}, `{{v}}`>> +{%- endif %}
+{% endfor %}
+{% endif %}
+
+{% for name, properties in properties.properties -%}
+{% include "schemaJsonRowTemplate.adoc" %}
+{%- endfor %}
+
+{% for name, properties in properties.allOf -%}
+{% include 'schemaJsonRowTemplate.adoc' %}
+{%- endfor %}
+
+
+{% endif %}
