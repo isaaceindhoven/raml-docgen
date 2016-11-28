@@ -1,6 +1,6 @@
 = RAML2asciidoc
 
-Convert your RAML (0.8 or 1.0) specification to asciidoc.
+Convert your RAML 1.0 specification to asciidoc.
 
 == Converting to PDF
 In order to convert the generated asciidoc to PDF, you will need link:https://github.com/asciidoctor/asciidoctor-pdf[asciidoctor-pdf]. The generated asciidoc has a theme directory set to `themes/`, with `themes/fonts` as fonts directory.
@@ -69,3 +69,24 @@ You can read the config from a file instead of having to use flags to define all
 === Writers
 You can write your own writer modules to change the output from asciidoc to something else. see `modules/writers/` for examples.
 By default, the program saves output for every writer saved in the `modules/writers/` directory. To disable a writer, change its extension from `.js` to something else, like `.js.disabled`
+
+== Compatibility
+This program has been tested using a RAML 1.0 specification. Compatibility with other RAML versions is not guaranteed.
+
+== License
+
+RAML documentation generator
+Copyright &copy; 2016 Cas Eliëns  
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
