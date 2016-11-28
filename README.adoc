@@ -18,6 +18,7 @@ node index.js
 .Render a file called 'api.raml' using default template
 ----
 node index.js -i api.raml
+    OR
 node index.js --input api.raml
 ----
 
@@ -25,6 +26,7 @@ node index.js --input api.raml
 .Render a file called 'api.raml' using custom template
 ----
 node index.js -i api.raml -t myTemplate
+    OR
 node index.js --input api.raml --template myTemplate
 ----
 
@@ -64,4 +66,6 @@ You can read the config from a file instead of having to use flags to define all
 ----
 
 == Modules
+=== Writers
 You can write your own writer modules to change the output from asciidoc to something else. see `modules/writers/` for examples.
+By default, the program saves output for every writer saved in the `modules/writers/` directory. To disable a writer, change its extension from `.js` to something else, like `.js.disabled`
