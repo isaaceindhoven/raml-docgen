@@ -2,8 +2,8 @@
 :doctype: book
 :icons: font
 :icon-set: fa{% if style %}
-:pdf-stylesdir: themes
-:pdf-fontsdir: themes/fonts
+:pdf-stylesdir: {% if styledir %}{{styledir}}{% else %}styles{% endif %}
+:pdf-fontsdir: {% if fontdir %}{{fontdir}}{% else %}styles/fonts{% endif%}
 :pdf-style: {{style}}{% endif %}
 :source-highlighter: rouge{% if api.author %}
 {{api.author}}{% if api.author_email %} <{{api.author_email}}>{% endif %}{% endif %}{%if api.version %}

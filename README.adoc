@@ -36,7 +36,9 @@ The program supports the following flags:
 ----
 -i, --input             STRING    Relative path to file containing RAML spec
 -t, --template          STRING    Name of template to use, stored in templates/<name>/template.adoc
--s, --style             STRING    asciidoctor-pdf theme name, stored in themes/<name>-theme.yml
+-y, --styledir          STRING    Directory that asciidoctor-pdf styles are stored in. Defaults to styles/
+-f, --fontsdir          STRING    Directory that asciidoctor-pdf font files are stored in. Defaults to styles/fonts/
+-s, --style             STRING    asciidoctor-pdf style name, stored in <styledir>/<name>-theme.yml
 -d, --debug             BOOLEAN   Be more verbose
 -j, --json              BOOLEAN   Write parsed API and schemas to api.json
 -e, --examples          BOOLEAN   Include examples in generated output
@@ -54,13 +56,15 @@ You can read the config from a file instead of having to use flags to define all
 .Example config file
 ----
 {
-  "input": "spec.raml",
-  "template": "default",
+  "input": "spec/api.raml",
   "debug": true,
-  "json": false,
   "examples": true,
-  "noExpand": false,
-  "headerregex": "\\/{version}\\/(\\w+)$",
+  "headerregex": "\\/{merchantId}\\/(\\w+)$",
+  "styledir": "styles",
+  "fontdir": "styles/fonts",
+  "style": "apidocs",
+  "json": false,
+  "template": "default",
   "schemapath": "spec/globalcollect/"
 }
 ----
