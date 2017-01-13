@@ -1,0 +1,70 @@
+/**!
+ * Copyright (C) 2016 Cas Eliëns
+ *
+ *     This file is part of RAML documentation generator
+ *     RAML documentation generator is free software: you can redistribute it
+ *     and/or modify it under the terms of the GNU General Public License
+ *     as published by the Free Software Foundation, either version 3 of
+ *     the License, or any later version.
+ *
+ *     RAML documentation generator is distributed in the hope that
+ *     it will be useful, but WITHOUT ANY WARRANTY; without even the
+ *     implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *     See the GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with RAML documentation generator.
+ *     If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+var fs = require("fs");
+
+/**
+ * Writer constructor
+ * @param Core Core object containing all global settings.
+ */
+function Example(Core){
+  this.c = Core;
+}
+
+// Change this to the name of your writer.
+// This should be the same as the name of the constructor above
+Example.prototype.name = "Example";
+
+/**
+ * All writers MUST have a write function
+ * This function is called after all parsing has been completed
+ *  to write a document using a JSON representation of the API.
+ *
+ * @param apiJSON JSON representation of the parsed API
+ */
+Example.prototype.write = function(apiJSON) {
+  // TODO: convert apiJSON to something pretty
+  var result = "";
+  this.writeFile(result);
+}
+
+/**
+ * All writers MUST have an init function
+ * This function is called before writing, and allows the writer
+ *  to perform some initialization tasks.
+ *
+ * For example, this can be used to set up a templating engine
+ */
+Example.prototype.init = function() {
+  // TODO: Initialize writer
+
+  var templateName = this.c.options.template;
+}
+
+/**
+ * Writers may contain their own functions
+ *
+ */
+Example.prototype.writeFile = function(rendered) {
+  fs.writeFile("api.adoc", rendered, function(err) {
+    if(err) return console.log(err);
+  });
+}
+
+module.exports = Example;

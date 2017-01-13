@@ -1,6 +1,6 @@
 = RAML2asciidoc
 
-Convert your RAML (0.8 or 1.0) specification to asciidoc.
+Convert your RAML 1.0 specification to asciidoc.
 
 == Converting to PDF
 In order to convert the generated asciidoc to PDF, you will need link:https://github.com/asciidoctor/asciidoctor-pdf[asciidoctor-pdf]. The generated asciidoc has a theme directory set to `themes/`, with `themes/fonts` as fonts directory.
@@ -18,6 +18,7 @@ node index.js
 .Render a file called 'api.raml' using default template
 ----
 node index.js -i api.raml
+    OR
 node index.js --input api.raml
 ----
 
@@ -25,6 +26,7 @@ node index.js --input api.raml
 .Render a file called 'api.raml' using custom template
 ----
 node index.js -i api.raml -t myTemplate
+    OR
 node index.js --input api.raml --template myTemplate
 ----
 
@@ -33,15 +35,18 @@ The program supports the following flags:
 [source]
 ----
 -i, --input             STRING    Relative path to file containing RAML spec
--t, --template          STRING    Name of Nunjucks template to use, stored in templates/<name>/template.adoc
--s, --style             STRING    asciidoctor-pdf theme name, stored in themes/<name>-theme.yml
+-t, --template          STRING    Name of template to use, stored in templates/<name>/template.adoc
+-y, --styledir          STRING    Directory that asciidoctor-pdf styles are stored in. Defaults to styles/
+-f, --fontsdir          STRING    Directory that asciidoctor-pdf font files are stored in. Defaults to styles/fonts/
+-s, --style             STRING    asciidoctor-pdf style name, stored in <styledir>/<name>-theme.yml
 -d, --debug             BOOLEAN   Be more verbose
--j, --json              BOOLEAN   Write parsed API to api.json
+-j, --json              BOOLEAN   Write parsed API and schemas to api.json
 -e, --examples          BOOLEAN   Include examples in generated output
 -n, --noExpand          BOOLEAN   Do not expand types in generated output
 -h, --headerregex       STRING    JavaScript regex pattern, first capture group in matched resource URI's is converted to section heading
 -a, --headerannotation  STRING    RAML Annotation used to identify section headings. Should be a string containing the preferred heading text
 -c, --config            STRING    File containing json formatted config
+-p, --schemapath        STRING    Path to root of al schemas, used for JSON schema resolution. This is usually the same directory as the RAML spec
 ----
 
 == Config file
@@ -51,12 +56,41 @@ You can read the config from a file instead of having to use flags to define all
 .Example config file
 ----
 {
-  "input": "spec.raml",
-  "template": "default",
+  "input": "spec/api.raml",
   "debug": true,
-  "json": false,
   "examples": true,
-  "noExpand": false,
-  "headerregex": "\\/{version}\\/(\\w+)$",
+  "headerregex": "\\/{merchantId}\\/(\\w+)$",
+  "styledir": "styles",
+  "fontdir": "styles/fonts",
+  "style": "apidocs",
+  "json": false,
+  "template": "default",
+  "schemapath": "spec/globalcollect/"
 }
 ----
+
+== Modules
+=== Writers
+You can write your own writer modules to change the output from asciidoc to something else. see `modules/writers/` for examples.
+By default, the program saves output for every writer saved in the `modules/writers/` directory. To disable a writer, change its extension from `.js` to something else, like `.js.disabled`
+
+== Compatibility
+This program has been tested using a RAML 1.0 specification. Compatibility with other RAML versions is not guaranteed.
+
+== License
+Copyright (C) 2017  ISAAC +
+Copyright (C) 2017  Cas Eliëns
+
+
+This program is free software: you can redistribute it and/or modify +
+it under the terms of the GNU General Public License as published by +
+the Free Software Foundation, either version 3 of the License, or +
+(at your option) any later version. +
+
+This program is distributed in the hope that it will be useful, +
+but WITHOUT ANY WARRANTY; without even the implied warranty of +
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the +
+GNU General Public License for more details. +
+
+You should have received a copy of the GNU General Public License +
+along with this program.  If not, see <http://www.gnu.org/licenses/>. +
