@@ -1,18 +1,18 @@
 {
-  "name": "RAML2asciidoc",
+  "name": "raml2asciidoc",
   "version": "1.0.0",
   "description": "Convert RAML API specification to asciidoc",
-  "bugs": "https://github.com/cascer1/raml-docs/issues",
+  "bugs": "https://github.com/isaaceindhoven/raml-docgen",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cascer1/raml-docs"
+    "url": "https://github.com/isaaceindhoven/raml-docgen"
   },
-  "author": "Cas Eliens <cas.eliens@gmail.com>",
-  "license": "GPL-3.0+",
+  "author": "Cas Eliens <cas.eliens@isaac.nl>",
+  "license": "MIT",
   "dependencies": {
     "command-line-args": "^3.0.1",
     "deasync": "^0.1.9",
