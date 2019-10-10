@@ -2,7 +2,7 @@
   "name": "raml2asciidoc",
   "version": "1.0.0",
   "description": "Convert RAML API specification to asciidoc",
-  "bugs": "https://github.com/isaaceindhoven/raml-docgen",
+  "bugs": "https://github.com/isaaceindhoven/raml-docgen/issues",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
